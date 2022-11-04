@@ -6,6 +6,23 @@
 <h2 class="my-3">My listings</h2>
 
 <?php
+  $connection = mysqli_connect('localhost', 'user1', 'uDhx3kBgKLLO*Bbo', 'Auction')
+  or die('Error connectingto MySQL server.' . mysqli_connect_error());
+
+  echo "Connected successfully...<br><br>";
+
+  $query = "SELECT firstName, lastName FROM Users";
+  $result = mysqli_query($connection, $query);
+
+  echo "Current users registered on our database:<br>";
+  while ($row = mysqli_fetch_assoc($result)){
+    echo $row['firstName'] . " " . $row['lastName'], "; ";
+  }
+
+  mysqli_close($connection);
+?>
+
+<?php
   // This page is for showing a user the auction listings they've made.
   // It will be pretty similar to browse.php, except there is no search bar.
   // This can be started after browse.php is working with a database.
