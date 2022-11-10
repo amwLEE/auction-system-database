@@ -1,11 +1,12 @@
-DROP DATABASE Auction;
-
 CREATE DATABASE Auction
     DEFAULT CHARACTER SET utf8
     DEFAULT COLLATE utf8_general_ci;
 
 USE Auction;
 
+-- Create table for users
+
+DROP TABLE IF EXISTS User;
 CREATE TABLE Users
 (
     userID INT AUTO_INCREMENT PRIMARY KEY,
@@ -18,14 +19,19 @@ CREATE TABLE Users
 )
 ENGINE = InnoDB;
 
-CREATE TABLE Category
+-- Create table for category
+
+DROP TABLE IF EXISTS Category;
+CREATE TABLE Category 
 (
     categoryID INT AUTO_INCREMENT PRIMARY KEY,
     categoryName VARCHAR(64) NOT NULL
 )
 ENGINE = InnoDB;
 
-CREATE TABLE Auction
+-- Create table for auction
+DROP TABLE IF EXISTS Auction;
+CREATE TABLE Auction 
 (
     itemID INT AUTO_INCREMENT PRIMARY KEY,
     itemName VARCHAR(64) NOT NULL,
@@ -41,7 +47,9 @@ CREATE TABLE Auction
 )
 ENGINE = InnoDB;
 
-CREATE TABLE Bid
+-- Create table for bid
+DROP TABLE IF EXISTS Bid;
+CREATE TABLE Bid 
 (
     bidID INT AUTO_INCREMENT PRIMARY KEY,
     itemID INT,
