@@ -1,5 +1,5 @@
 <?php
-  $connection = mysqli_connect('localhost', 'user1', 'uDhx3kBgKLLO*Bbo', 'Auction')
+  $connection = mysqli_connect('localhost', 'root', 'root', 'Auction')
   or die('Error connectingto MySQL server.' . mysqli_connect_error());
 
   echo "Connected successfully...<br><br>";
@@ -13,5 +13,5 @@
   $result = mysqli_query($connection, $query)
   or die('Error making saveToDatabase query.' . mysqli_error($connection));
 
-  mysqli_close($connection);
+
 ?>
