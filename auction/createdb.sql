@@ -6,14 +6,13 @@ USE Auction;
 
 -- Create table for users
 
-DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS Users;
 CREATE TABLE Users
 (
     userID INT AUTO_INCREMENT PRIMARY KEY,
-    firstName VARCHAR(64) NOT NULL,
-    lastName VARCHAR(64) NOT NULL,
+    firstName VARCHAR(64) NULL,
+    lastName VARCHAR(64) NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
-    username VARCHAR(20) NOT NULL,
     password VARCHAR(20) NOT NULL,
     CHECK (email LIKE '%_@__%.__%')
 )
