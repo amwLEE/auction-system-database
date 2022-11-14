@@ -8,9 +8,9 @@
   <div class= "message">
     <?php
       include 'process_registration.php';
-      
-        if (isset($success) && $success == true ){
-          header("Location: login_result.php"); //redirects to login result
+        
+        if (isset($success) && ($success == true) ){
+          echo '<p color="green">Your account has been created. <a href="./login.php">Click here</a> to login!<p>';
         }else{
           echo '<p style="color:red;">'.$error_msg.'</p>'; //display error message
         }
