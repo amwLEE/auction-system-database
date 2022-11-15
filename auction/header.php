@@ -23,7 +23,7 @@
   <!-- Custom CSS file -->
   <link rel="stylesheet" href="css/custom.css">
 
-  <title> Group 10 Auction Site <!--CHANGEME!--></title>
+  <title> Group 10 Auction Site </title>
 </head>
 
 
@@ -31,7 +31,7 @@
 
 <!-- Navbars -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light mx-2">
-  <a class="navbar-brand" href="#">Group 10 <!--CHANGEME!--></a>
+  <a class="navbar-brand" href="#">Group 10</a>
   <ul class="navbar-nav ml-auto">
     <li class="nav-item">
     

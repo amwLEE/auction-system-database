@@ -10,10 +10,11 @@ DROP TABLE IF EXISTS Users;
 CREATE TABLE Users
 (
     userID INT AUTO_INCREMENT PRIMARY KEY,
-    firstName VARCHAR(64) NULL,
-    lastName VARCHAR(64) NULL,
+    firstName VARCHAR(64) NOT NULL,
+    lastName VARCHAR(64) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     `password` VARCHAR(100) NOT NULL,
+    account_type BOOLEAN NOT NULL,
     CHECK (email LIKE '%_@__%.__%')
 )
 ENGINE = InnoDB;
