@@ -2,6 +2,14 @@ CREATE DATABASE Auction
     DEFAULT CHARACTER SET utf8
     DEFAULT COLLATE utf8_general_ci;
 
+-- Create admin account for database
+CREATE USER 'adbadmin'@'localhost'
+	IDENTIFIED BY 'Group10'; -- This is the password
+
+GRANT *
+    ON Auction.*
+    TO 'adbadmin'@'localhost';
+
 USE Auction;
 
 -- Create table for users
