@@ -8,7 +8,8 @@
   <div class= "message">
     <?php
       include 'process_registration.php';
-        
+        global $error_msg;
+
         if (isset($success) && ($success == true) ){
           echo '<p color="green">Your account has been created. <a href="./login.php">Click here</a> to login!<p>';
         }else{
