@@ -1,6 +1,20 @@
+DROP DATABASE IF EXISTS Auction;
+
 CREATE DATABASE AuctionDB
     DEFAULT CHARACTER SET utf8
     DEFAULT COLLATE utf8_general_ci;
+
+-- Create admin account for database
+
+DROP USER 'adbadmin'@'localhost';
+FLUSH PRIVILEGES;
+
+CREATE USER 'adbadmin'@'localhost'
+	IDENTIFIED BY 'Group10'; -- This is the password
+
+GRANT ALL PRIVILEGES
+    ON Auction.*
+    TO 'adbadmin'@'localhost';
 
 USE AuctionDB;
 
