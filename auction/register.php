@@ -4,7 +4,18 @@
 <h2 class="my-3">Register new account</h2>
 
 <!-- Create auction form -->
-<form method="POST" action="process_registration.php">
+<form method="POST" action="register.php">
+  <div class= "message">
+    <?php
+      include 'process_registration.php';
+        
+        if (isset($success) && ($success == true) ){
+          echo '<p color="green">Your account has been created. <a href="./login.php">Click here</a> to login!<p>';
+        }else{
+          echo '<p style="color:red;">'.$error_msg.'</p>'; //display error message
+        }
+    ?>
+  </div>
   <div class="form-group row">
     <label for="accountType" class="col-sm-2 col-form-label text-right">Registering as a:</label>
 	<div class="col-sm-10">
@@ -22,26 +33,40 @@
   <div class="form-group row">
     <label for="email" class="col-sm-2 col-form-label text-right">Email</label>
 	<div class="col-sm-10">
-      <input type="text" class="form-control" id="email" placeholder="Email">
+      <input type="text" class="form-control" id="email" name="email" placeholder="Email" >
       <small id="emailHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
+	</div>
+  </div>
+  <div class="form-group row">
+    <label for="firstName" class="col-sm-2 col-form-label text-right">First Name</label>
+	<div class="col-sm-10">
+      <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name" >
+      <small id="firstNameHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
+	</div>
+  </div>
+  <div class="form-group row">
+    <label for="lastName" class="col-sm-2 col-form-label text-right">Last Name</label>
+	<div class="col-sm-10">
+      <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name" >
+      <small id="lastNameHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
 	</div>
   </div>
   <div class="form-group row">
     <label for="password" class="col-sm-2 col-form-label text-right">Password</label>
     <div class="col-sm-10">
-      <input type="password" class="form-control" id="password" placeholder="Password">
+      <input type="password" class="form-control" id="password" name="password" placeholder="Password">
       <small id="passwordHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
     </div>
   </div>
   <div class="form-group row">
     <label for="passwordConfirmation" class="col-sm-2 col-form-label text-right">Repeat password</label>
     <div class="col-sm-10">
-      <input type="password" class="form-control" id="passwordConfirmation" placeholder="Enter password again">
+      <input type="password" class="form-control" id="passwordConfirmation" name="passwordConfirmation" placeholder="Enter password again">
       <small id="passwordConfirmationHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
     </div>
   </div>
   <div class="form-group row">
-    <button type="submit" class="btn btn-primary form-control">Register</button>
+    <button type="submit" name="submit" value="submit" class="btn btn-primary form-control">Register</button>
   </div>
 </form>
 
