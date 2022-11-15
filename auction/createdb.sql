@@ -1,8 +1,8 @@
-CREATE DATABASE Auction
+CREATE DATABASE AuctionDB
     DEFAULT CHARACTER SET utf8
     DEFAULT COLLATE utf8_general_ci;
 
-USE Auction;
+USE AuctionDB;
 
 -- Create table for users
 
@@ -13,7 +13,7 @@ CREATE TABLE Users
     firstName VARCHAR(64) NOT NULL,
     lastName VARCHAR(64) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
-    `password` VARCHAR(100) NOT NULL,
+    userPassword VARCHAR(100) NOT NULL,
     account_type BOOLEAN NOT NULL,
     CHECK (email LIKE '%_@__%.__%')
 )
@@ -54,7 +54,7 @@ CREATE TABLE Bid
     bidID INT AUTO_INCREMENT PRIMARY KEY,
     itemID INT,
     buyerID INT,
-    timestamp TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    bidTimeStamp TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     bidPrice DECIMAL(12,2) NOT NULL,
     FOREIGN KEY (itemID) REFERENCES Auction(itemID),
     FOREIGN KEY (buyerID) REFERENCES Users(userID)

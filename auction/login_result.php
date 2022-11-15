@@ -18,7 +18,7 @@ if (isset($_POST['loginForm'])){
     if ($email == "" || $password == ""){
         $login_error = "Please fill in all required fields";
     }else{
-        $query = "SELECT * FROM Users WHERE email='{$email}' AND password = SHA('$password')";
+        $query = "SELECT * FROM Users WHERE email='{$email}' AND userPassword = SHA('$password')";
         $result = mysqli_query($connection, $query);
         
             if ($result->num_rows > 0) {

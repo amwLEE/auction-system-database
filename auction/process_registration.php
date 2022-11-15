@@ -35,7 +35,7 @@
             }
 
 
-            mysqli_query($connection,"INSERT INTO Users (firstName, lastName, email, password)
+            mysqli_query($connection,"INSERT INTO Users (firstName, lastName, email, userPassword)
             VALUES ('$firstName','$lastName','$email',SHA('$password'))");
 
             $query = mysqli_query($connection, "SELECT * FROM Users WHERE email='{$email}'");
