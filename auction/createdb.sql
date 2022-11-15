@@ -13,7 +13,7 @@ CREATE TABLE Users
     firstName VARCHAR(64) NULL,
     lastName VARCHAR(64) NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(100) NOT NULL,
+    `password` VARCHAR(100) NOT NULL,
     CHECK (email LIKE '%_@__%.__%')
 )
 ENGINE = InnoDB;

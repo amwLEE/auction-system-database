@@ -8,6 +8,8 @@
 
 include 'database.php';
 
+session_start();
+
 if (isset($_POST['loginForm'])){
 
     $email = mysqli_real_escape_string($connection, $_POST['email']);
@@ -19,11 +21,18 @@ if (isset($_POST['loginForm'])){
         $query = "SELECT * FROM Users WHERE email='{$email}' AND password = SHA('$password')";
         $result = mysqli_query($connection, $query);
         
-            // something wrong here.
             if ($result->num_rows > 0) {
                 // output data of each row
                 while($row = $result->fetch_assoc()) {
                     echo "email: ". $row["email"].". First Name: ".$row['firstName'];
+                    echo "Log in successful";
+
+                    // start session
+                    $_SESSION['logged_in'] = true;
+                    $_SESSION['email'] = $email;
+
+                     //Redirect to index after 5 seconds
+                    header("refresh:5;url=index.php");
 
                 }
               } else {
@@ -45,7 +54,6 @@ $connection->close();
 
 // echo('<div class="text-center">You are now logged in! You will be redirected shortly.</div>');
 
-// Redirect to index after 5 seconds
-// header("refresh:5;url=index.php");
+
 
 ?>

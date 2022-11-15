@@ -12,14 +12,27 @@
     $lastName = mysqli_real_escape_string($connection, $_POST['lastName']);
     $password = mysqli_real_escape_string($connection, $_POST['password']);
     $password2 = mysqli_real_escape_string($connection, $_POST['passwordConfirmation']);
-    
+
+
 
     // check if all fields are filled in 
     if ($email != "" && $firstName != "" && $lastName != "" && $password != "" && $password2 != "" ){
 
-        if ($password !== $password2){
-            $error_msg = 'Your passwords did not match.';
-        }else{
+       
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error_msg = "Invalid email format";
+
+            if ($password !== $password2){ 
+                $error_msg = 'Your passwords did not match.';
+            }
+        }
+       else{
+            $query = mysqli_query($connection, "SELECT * FROM Users WHERE email='{$email}'");
+            if (mysqli_num_rows($query) == 1){
+            
+                $error_msg = 'That email is already registered.';
+            }
 
 
             mysqli_query($connection,"INSERT INTO Users (firstName, lastName, email, password)

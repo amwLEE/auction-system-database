@@ -7,6 +7,8 @@
 <form method="POST" action="register.php">
   <div class= "message">
     <?php
+    global $error_msg;
+    
       include 'process_registration.php';
         
         if (isset($success) && ($success == true) ){
