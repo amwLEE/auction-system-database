@@ -4,8 +4,12 @@ CREATE DATABASE AuctionDB
     DEFAULT CHARACTER SET utf8
     DEFAULT COLLATE utf8_general_ci;
 
--- Create admin account for database
 
+
+USE AuctionDB;
+
+
+-- Create admin account for database
 DROP USER IF EXISTS 'adbadmin'@'localhost';
 FLUSH PRIVILEGES;
 
@@ -15,8 +19,6 @@ CREATE USER 'adbadmin'@'localhost'
 GRANT ALL PRIVILEGES
     ON AuctionDB.*
     TO 'adbadmin'@'localhost';
-
-USE AuctionDB;
 
 -- Create table for users
 

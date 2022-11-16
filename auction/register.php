@@ -12,7 +12,7 @@
         global $error_msg;
 
         if (isset($success) && ($success == true) ){
-          echo '<p color="green">Your account has been created. <a href="./login.php">Click here</a> to login!<p>';
+          echo '<p color="green">Your account has been created. Click login button in header to login!<p>';
         }else{
           echo '<p style="color:red;">'.$error_msg.'</p>'; //display error message
         }

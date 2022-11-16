@@ -35,7 +35,7 @@
 
 
             mysqli_query($connection,"INSERT INTO Users (firstName, lastName, email, userPassword,account_type)
-            VALUES ('$firstName','$lastName','$email',SHA('$password')),'$account_type')");
+            VALUES ('$firstName','$lastName','$email',SHA('$password'),'$account_type')");
 
             $query = mysqli_query($connection, "SELECT * FROM Users WHERE email='{$email}'");
             if (mysqli_num_rows($query) == 1){
