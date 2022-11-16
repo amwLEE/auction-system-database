@@ -17,7 +17,7 @@
         <form action="bid_form.php" method="POST"> 
             <div class= "message">
                 <?php
-                include_once 'process_bid.php';
+                include 'process_bid.php';                    
                     global $error_msg;
 
                     if (isset($success) && ($success == true) ){
@@ -28,7 +28,7 @@
                 ?>
             </div>
             
-            <!-- All Parameters: bidID, itemID, buyerID, bidTimeStamp, bidPrice -->
+            <!-- Table Parameters: bidID, itemID, buyerID, bidTimeStamp, bidPrice -->
             <div class="form-group row">
                 <!-- Bid Price -->
                 <label for="bidPrice" class="col-sm-2 col-form-label text-right">Bid Price ($):</label>
@@ -37,12 +37,13 @@
                         <!-- Should we set the minimum value to the current bid price or 0? -->
                         <small id="bidPriceHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
 	                </div>
-            
+            </div>
+
             <div class="form-group">
                 <button type="submit" name="submitBidForm" value="submitBidForm" class="btn btn-success form-control">Submit Bid</button>
             </div>
 
-            </div>
+            
         </form>
     </body>
 </div>            
