@@ -22,11 +22,11 @@
     <label for="accountType" class="col-sm-2 col-form-label text-right">Registering as a:</label>
 	<div class="col-sm-10">
 	  <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="accountType" id="accountBuyer" value="buyer" checked>
+        <input class="form-check-input" type="radio" name="accountType" id="accountBuyer" value=0 checked>
         <label class="form-check-label" for="accountBuyer">Buyer</label>
       </div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="accountType" id="accountSeller" value="seller">
+        <input class="form-check-input" type="radio" name="accountType" id="accountSeller" value=1>
         <label class="form-check-label" for="accountSeller">Seller</label>
       </div>
       <small id="accountTypeHelp" class="form-text-inline text-muted"><span class="text-danger">* Required.</span></small>

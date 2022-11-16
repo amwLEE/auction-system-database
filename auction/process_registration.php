@@ -12,13 +12,12 @@
     $lastName = mysqli_real_escape_string($connection, $_POST['lastName']);
     $password = mysqli_real_escape_string($connection, $_POST['password']);
     $password2 = mysqli_real_escape_string($connection, $_POST['passwordConfirmation']);
-
-
+    $account_type = mysqli_real_escape_string($connection,$_POST['accountType']);
 
     // check if all fields are filled in 
     if ($email != "" && $firstName != "" && $lastName != "" && $password != "" && $password2 != "" ){
 
-       
+    
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $error_msg = "Invalid email format";
@@ -35,8 +34,8 @@
             }
 
 
-            mysqli_query($connection,"INSERT INTO Users (firstName, lastName, email, userPassword)
-            VALUES ('$firstName','$lastName','$email',SHA('$password'))");
+            mysqli_query($connection,"INSERT INTO Users (firstName, lastName, email, userPassword,account_type)
+            VALUES ('$firstName','$lastName','$email',SHA('$password')),'$account_type')");
 
             $query = mysqli_query($connection, "SELECT * FROM Users WHERE email='{$email}'");
             if (mysqli_num_rows($query) == 1){
