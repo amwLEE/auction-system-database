@@ -31,9 +31,8 @@
             if (mysqli_num_rows($query) == 1){
             
                 $error_msg = 'That email is already registered.';
-            }
-
-
+               
+            }else{
             mysqli_query($connection,"INSERT INTO Users (firstName, lastName, email, userPassword,account_type)
             VALUES ('$firstName','$lastName','$email',SHA('$password'),'$account_type')");
 
@@ -46,6 +45,7 @@
                 $error_msg = 'An error occurred and your account was not created.';
 
         }
+    }
        
     }
     else{
@@ -53,8 +53,8 @@
     }
     
 
-}
 
+    }
 
     
 ?>
