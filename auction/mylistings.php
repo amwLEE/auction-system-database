@@ -14,8 +14,10 @@
   // the shared "utilities.php" where they can be shared by multiple files.
   
   // TODO: Check user's credentials (cookie/session).
-  $sellerID = 1;
-  
+  $email = $_SESSION['email'];
+  $user_credentials = mysqli_query($connection, "SELECT userID FROM Users WHERE email='$email'");
+  $sellerID = intval(mysqli_fetch_row($user_credentials)[0]);
+
   // TODO: Perform a query to pull up their auctions.
   $mylistings = mysqli_query($connection, "SELECT * FROM Auction WHERE sellerID=$sellerID ORDER BY itemID DESC");
 

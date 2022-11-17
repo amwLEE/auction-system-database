@@ -6,6 +6,7 @@
   $item_id = $_GET['item_id'];
 
   // TODO: Use item_id to make a query to the database.
+  
 
   // DELETEME: For now, using placeholder data.
   $title = "Placeholder title";
