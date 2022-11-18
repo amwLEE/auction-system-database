@@ -12,7 +12,7 @@
   $description = "Description blah blah blah";
   $current_price = 30.50;
   $num_bids = 1;
-  $end_time = new DateTime('2020-11-02T00:00:00');
+  $end_time = new DateTime('2022-12-31T23:59:59');
 
   // TODO: Note: Auctions that have ended may pull a different set of data,
   //       like whether the auction ended in a sale or was cancelled due
