@@ -121,7 +121,8 @@
 <h6>Bid History</h6>
 
 <?php if ($num_bids==0): ?>
-  <p>No bid history found.</p>
+  <span style='color:red;'>No bid history found</span>
+  <br>
 <?php else: ?>
   <table border="1">
     <thead>
@@ -146,6 +147,24 @@
     </tbody>
   </table>
 <?php endif ?>
+
+<br>
+<h6>Remarks</h6>
+<?php
+mysqli_data_seek($result, 0);
+if ($now > $end_time) {
+  if ($num_bids == 0) {
+    echo "<span style='color:red;'>This item was not sold because there were no bids</span>";
+  } elseif ($current_price < $auction['reservePrice']) {
+    echo "<span style='color:red;'>This item was not sold because reserve price not met</span>";
+  } else {
+    $winner = mysqli_fetch_row($result)[2];
+    echo "<span style='color:green;'>This item was sold to User#$winner</span>";
+  }
+} else {
+  echo "<span style='color:orange;'>This auction is still in progress</span>";
+}
+?>
   
   </div> <!-- End of right col with bidding info -->
 

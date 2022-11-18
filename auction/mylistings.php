@@ -39,11 +39,17 @@
       $price = 0;
     }
     
-    if ($price>$listing['reservePrice']){
-      echo "<mark>Sold</mark>";
-    } else{
-      echo "<mark>Not sold</mark>";
+    $now = new DateTime();
+    if ($now > $end_time) {
+      if ($price > $listing['reservePrice']) {
+        echo "<mark>Sold</mark>";
+      } else {
+        echo "<mark>Not sold</mark>";
+      }
+    } else {
+      echo "<mark>In progress</mark>";
     }
+
     print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time);
   }
 ?>
