@@ -4,12 +4,7 @@
 
 <?php
   // Check user's credentials (cookie/session).
-  $email = $_SESSION['email'];
-  $query = "SELECT userID, account_type FROM Users WHERE email='$email'";
-  $result = mysqli_query($connection, $query);
-  $user_credentials = mysqli_fetch_row($result);
-  $user_id = $user_credentials[0];
-  $account_type = $user_credentials[1];
+  $account_type = $_SESSION['account_type'];
 
   // Get info from the URL:
   $item_id = $_GET['item_id'];
