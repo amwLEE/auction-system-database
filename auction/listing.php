@@ -1,4 +1,5 @@
 <?php include_once("header.php")?>
+<?php require("database.php")?>
 <?php require("utilities.php")?>
 
 <?php
@@ -6,14 +7,32 @@
   $item_id = $_GET['item_id'];
 
   // TODO: Use item_id to make a query to the database.
-  
+  $query = "SELECT * FROM Auction WHERE itemID=$item_id";
+  $result = mysqli_query($connection, $query);
+  $auction = mysqli_fetch_assoc($result);
+
+  $category_id = $auction['categoryID'];
+  $query = "SELECT * FROM Category WHERE categoryID='$category_id'";
+  $result = mysqli_query($connection, $query);
+  $category = mysqli_fetch_assoc($result);
+
+  $query = "SELECT * FROM Bid WHERE itemID=$item_id ORDER BY bidID DESC";
+  $result = mysqli_query($connection, $query);
 
   // DELETEME: For now, using placeholder data.
-  $title = "Placeholder title";
-  $description = "Description blah blah blah";
-  $current_price = 30.50;
-  $num_bids = 1;
-  $end_time = new DateTime('2020-11-02T00:00:00');
+  $title = $auction['itemName'];
+  $description = $auction['itemDescription'];
+  $category_name = $category['categoryName'];
+  $end_time = new DateTime($auction['endDateTime']);
+  if (mysqli_num_rows($result) > 0){
+    $num_bids = mysqli_num_rows($result);
+    $current_price = mysqli_fetch_row($result)[4];
+  } else{
+    $num_bids = 0;
+    $current_price = 0;
+  }
+
+  echo "<mark>$category_name</mark>";
 
   // TODO: Note: Auctions that have ended may pull a different set of data,
   //       like whether the auction ended in a sale or was cancelled due
@@ -62,7 +81,11 @@
   <div class="col-sm-8"> <!-- Left col with item info -->
 
     <div class="itemDescription">
-    <?php echo($description); ?>
+      <?php echo($description); ?>
+    </div>
+
+    <div>
+      <img src="https://image.shutterstock.com/image-vector/coming-soon-grunge-rubber-stamp-260nw-196970096.jpg" alt="Coming soon">
     </div>
 
   </div>
@@ -89,6 +112,35 @@
     </form>
 <?php endif ?>
 
+<br>
+<h6>Bid History</h6>
+
+<?php if ($num_bids==0): ?>
+  <p>No bid history found.</p>
+<?php else: ?>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Bid ID</th>
+        <th>User ID</th>
+        <th>UTC Timestamp</th>
+        <th>Bid Price</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <?php mysqli_data_seek($result, 0); ?>
+      <?php while ($bid = mysqli_fetch_assoc($result)): ?>
+        <tr>
+          <td><?php echo $bid['bidID']; ?></td>
+          <td><?php echo $bid['buyerID']; ?></td>
+          <td><?php echo $bid['bidTimeStamp']; ?></td>
+          <td><?php echo $bid['bidPrice']; ?></td>
+        </tr>
+      <?php endwhile ?>
+    </tbody>
+  </table>
+<?php endif ?>
   
   </div> <!-- End of right col with bidding info -->
 

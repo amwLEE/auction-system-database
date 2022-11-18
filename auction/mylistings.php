@@ -16,7 +16,7 @@
   // TODO: Check user's credentials (cookie/session).
   $email = $_SESSION['email'];
   $user_credentials = mysqli_query($connection, "SELECT userID FROM Users WHERE email='$email'");
-  $sellerID = intval(mysqli_fetch_row($user_credentials)[0]);
+  $sellerID = mysqli_fetch_assoc($user_credentials)['userID'];
 
   // TODO: Perform a query to pull up their auctions.
   $mylistings = mysqli_query($connection, "SELECT * FROM Auction WHERE sellerID=$sellerID ORDER BY itemID DESC");
@@ -35,6 +35,12 @@
     } else{
       $num_bids = 0;
       $price = 0;
+    }
+    
+    if ($price>$listing['reservePrice']){
+      echo "<mark>Sold</mark>";
+    } else{
+      echo "<mark>Not sold</mark>";
     }
     print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time);
   }
