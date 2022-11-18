@@ -3,6 +3,14 @@
 <?php require("utilities.php")?>
 
 <?php
+  // Check user's credentials (cookie/session).
+  $email = $_SESSION['email'];
+  $query = "SELECT userID, account_type FROM Users WHERE email='$email'";
+  $result = mysqli_query($connection, $query);
+  $user_credentials = mysqli_fetch_row($result);
+  $user_id = $user_credentials[0];
+  $account_type = $user_credentials[1];
+
   // Get info from the URL:
   $item_id = $_GET['item_id'];
 
@@ -64,7 +72,7 @@
 <?php
   /* The following watchlist functionality uses JavaScript, but could
      just as easily use PHP as in other places in the code */
-  if ($now < $end_time):
+  if (($now < $end_time) && ($account_type == 0)):
 ?>
     <div id="watch_nowatch" <?php if ($has_session && $watching) echo('style="display: none"');?> >
       <button type="button" class="btn btn-outline-secondary btn-sm" onclick="addToWatchlist()">+ Add to watchlist</button>
@@ -101,15 +109,17 @@
     <p class="lead">Current bid: £<?php echo(number_format($current_price, 2)) ?></p>
 
     <!-- Bidding form -->
-    <form method="POST" action="place_bid.php">
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text">£</span>
+    <?php if ($account_type == 0): ?>
+      <form method="POST" action="place_bid.php">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">£</span>
+          </div>
+        <input type="number" class="form-control" id="bid">
         </div>
-	    <input type="number" class="form-control" id="bid">
-      </div>
-      <button type="submit" class="btn btn-primary form-control">Place bid</button>
-    </form>
+        <button type="submit" class="btn btn-primary form-control">Place bid</button>
+      </form>
+    <?php endif ?>
 <?php endif ?>
 
 <br>
