@@ -145,7 +145,7 @@
           <td><?php echo $bid['bidID']; ?></td>
           <td><?php echo $bid['buyerID']; ?></td>
           <td><?php echo $bid['bidTimeStamp']; ?></td>
-          <td><?php echo $bid['bidPrice']; ?></td>
+          <td><?php echo "£" . $bid['bidPrice']; ?></td>
         </tr>
       <?php endwhile ?>
     </tbody>

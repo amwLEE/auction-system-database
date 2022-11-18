@@ -30,8 +30,10 @@ if (isset($_POST['loginForm'])){
                     // start session
                     $_SESSION['logged_in'] = true;
                     $_SESSION['email'] = $email;
+                    $_SESSION['userID'] = $row['userID'];
+                    $_SESSION['account_type'] = $row['account_type'];
 
-                     //Redirect to index after 5 seconds
+                    //Redirect to index after 5 seconds
                     header("refresh:5;url=index.php");
 
                 }
