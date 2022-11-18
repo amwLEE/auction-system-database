@@ -12,6 +12,10 @@
   // TODO: Use item_id to make a query to the database.
   $query = "SELECT * FROM Auction WHERE itemID=$item_id";
   $result = mysqli_query($connection, $query);
+  if (mysqli_num_rows($result) == 0) {
+    header("Location: index.php");
+    exit;
+  }
   $auction = mysqli_fetch_assoc($result);
 
   $category_id = $auction['categoryID'];
