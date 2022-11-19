@@ -3,6 +3,13 @@
 <?php require("utilities.php")?>
 
 <?php
+  $url = $_SERVER['REQUEST_URI'];
+  if ($url == ("/auction/listing.php" || "/auction/listing")) {
+    echo "<h1>404 Not Found</h1>";
+    echo "The page that you have requested could not be found.";
+    exit;
+  }
+
   // Check user's credentials (cookie/session).
   if (isset($_SESSION['logged_in'])==1) {
     $account_type = $_SESSION['account_type'];
