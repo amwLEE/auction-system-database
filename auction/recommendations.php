@@ -24,9 +24,31 @@ if (!(isset($_SESSION['logged_in']) && ($_SESSION['account_type']==0))) {
   $buyerID = $_SESSION['userID'];
 
   // TODO: Perform a query to pull up auctions they might be interested in.
-  $query = "SELECT * FROM Auction WHERE endDateTime>NOW()";
+  $query = "SELECT * FROM Bid WHERE buyerID=$buyerID";
   $result = mysqli_query($connection, $query);
-  $recommendation = "34,2,44,50"; // Hard coded for now
+  $arr = array();
+  if (mysqli_num_rows($result) == 0){
+    echo "You have not bid on any items so far, check out these trending auction listings.";
+    $query = "SELECT b.itemID, COUNT(b.itemID)
+              FROM Auction a, Bid b
+              WHERE a.itemID=b.itemID AND a.endDateTime>NOW()
+              GROUP BY b.itemID
+              ORDER BY COUNT(b.itemID) DESC, b.bidTimeStamp DESC, a.endDateTime ASC
+              LIMIT 0,5";
+    $result = mysqli_query($connection, $query);
+    while ($listing = mysqli_fetch_assoc($result)){
+      $arr[] = $listing['itemID'];
+    }
+  } else {
+    // This section is hard coded for now
+    echo "Based on your bid history, you may be interested in the following auction listings.";
+    $query = "SELECT * FROM Auction WHERE endDateTime>NOW() LIMIT 0,5";
+    $result = mysqli_query($connection, $query);
+    while ($listing = mysqli_fetch_assoc($result)){
+      $arr[] = $listing['itemID'];
+    }
+  }
+  $recommendation = implode(',', $arr);
 
   $query = "SELECT * FROM Auction WHERE itemID IN ($recommendation) ORDER BY FIELD(itemID,$recommendation)";
   $result = mysqli_query($connection, $query);
