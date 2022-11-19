@@ -33,7 +33,7 @@ if (isset($_POST['loginForm'])){
                     $_SESSION['userID'] = $row['userID'];
                     $_SESSION['account_type'] = $row['account_type'];
 
-                     //Redirect to index after 5 seconds
+                    //Redirect to index after 5 seconds
                     header("refresh:5;url=index.php");
 
                 }

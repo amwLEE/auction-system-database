@@ -1,18 +1,45 @@
 <?php include_once("header.php")?>
+<?php require("database.php")?>
 <?php require("utilities.php")?>
 
 <?php
+  // Check user's credentials (cookie/session).
+  $account_type = $_SESSION['account_type'];
+
   // Get info from the URL:
   $item_id = $_GET['item_id'];
 
   // TODO: Use item_id to make a query to the database.
+  $query = "SELECT * FROM Auction WHERE itemID=$item_id";
+  $result = mysqli_query($connection, $query);
+  if (mysqli_num_rows($result) == 0) {
+    header("Location: index.php");
+    exit;
+  }
+  $auction = mysqli_fetch_assoc($result);
+
+  $category_id = $auction['categoryID'];
+  $query = "SELECT * FROM Category WHERE categoryID='$category_id'";
+  $result = mysqli_query($connection, $query);
+  $category = mysqli_fetch_assoc($result);
+
+  $query = "SELECT * FROM Bid WHERE itemID=$item_id ORDER BY bidID DESC";
+  $result = mysqli_query($connection, $query);
 
   // DELETEME: For now, using placeholder data.
-  $title = "Placeholder title";
-  $description = "Description blah blah blah";
-  $current_price = 30.50;
-  $num_bids = 1;
-  $end_time = new DateTime('2022-12-31T23:59:59');
+  $title = $auction['itemName'];
+  $description = $auction['itemDescription'];
+  $category_name = $category['categoryName'];
+  $end_time = new DateTime($auction['endDateTime']);
+  if (mysqli_num_rows($result) > 0){
+    $num_bids = mysqli_num_rows($result);
+    $current_price = mysqli_fetch_row($result)[4];
+  } else{
+    $num_bids = 0;
+    $current_price = 0;
+  }
+
+  echo "<mark>$category_name</mark>";
 
   // TODO: Note: Auctions that have ended may pull a different set of data,
   //       like whether the auction ended in a sale or was cancelled due
@@ -44,7 +71,7 @@
 <?php
   /* The following watchlist functionality uses JavaScript, but could
      just as easily use PHP as in other places in the code */
-  if ($now < $end_time):
+  if (($now < $end_time) && ($account_type == 0)):
 ?>
     <div id="watch_nowatch" <?php if ($has_session && $watching) echo('style="display: none"');?> >
       <button type="button" class="btn btn-outline-secondary btn-sm" onclick="addToWatchlist()">+ Add to watchlist</button>
@@ -61,7 +88,11 @@
   <div class="col-sm-8"> <!-- Left col with item info -->
 
     <div class="itemDescription">
-    <?php echo($description); ?>
+      <?php echo($description); ?>
+    </div>
+
+    <div>
+      <img src="https://image.shutterstock.com/image-vector/coming-soon-grunge-rubber-stamp-260nw-196970096.jpg" alt="Coming soon">
     </div>
 
   </div>
@@ -70,13 +101,14 @@
 
     <p>
 <?php if ($now > $end_time): ?>
-     This auction ended <?php echo(date_format($end_time, 'j M H:i')) ?>
+     This auction ended <?php echo(date_format($end_time, 'j M Y H:i')) ?>
      <!-- TODO: Print the result of the auction here? -->
 <?php else: ?>
-     Auction ends <?php echo(date_format($end_time, 'j M H:i') . $time_remaining) ?></p>  
+     Auction ends <?php echo(date_format($end_time, 'j M Y H:i') . $time_remaining) ?></p>  
     <p class="lead">Current bid: £<?php echo(number_format($current_price, 2)) ?></p>
 
     <!-- Bidding form -->
+  <?php if ($account_type == 0): ?>
     <form method="POST" action="#">
       <div class= "message">
         <?php
@@ -99,8 +131,57 @@
       <small id="bidPriceHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
       <button type="submit" class="btn btn-primary form-control" name="submitBidForm" value="submitBidForm">Place bid</button>
     </form>
+    <?php endif ?>
 <?php endif ?>
 
+<br>
+<h6>Bid History</h6>
+
+<?php if ($num_bids==0): ?>
+  <span style='color:red;'>No bid history found</span>
+  <br>
+<?php else: ?>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Bid ID</th>
+        <th>User ID</th>
+        <th>UTC Timestamp</th>
+        <th>Bid Price</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <?php mysqli_data_seek($result, 0); ?>
+      <?php while ($bid = mysqli_fetch_assoc($result)): ?>
+        <tr>
+          <td><?php echo $bid['bidID']; ?></td>
+          <td><?php echo $bid['buyerID']; ?></td>
+          <td><?php echo $bid['bidTimeStamp']; ?></td>
+          <td><?php echo "£" . $bid['bidPrice']; ?></td>
+        </tr>
+      <?php endwhile ?>
+    </tbody>
+  </table>
+<?php endif ?>
+
+<br>
+<h6>Remarks</h6>
+<?php
+mysqli_data_seek($result, 0);
+if ($now > $end_time) {
+  if ($num_bids == 0) {
+    echo "<span style='color:red;'>This item was not sold because there were no bids</span>";
+  } elseif ($current_price < $auction['reservePrice']) {
+    echo "<span style='color:red;'>This item was not sold because reserve price not met</span>";
+  } else {
+    $winner = mysqli_fetch_row($result)[2];
+    echo "<span style='color:green;'>This item was sold to User#$winner</span>";
+  }
+} else {
+  echo "<span style='color:orange;'>This auction is still in progress</span>";
+}
+?>
   
   </div> <!-- End of right col with bidding info -->
 
