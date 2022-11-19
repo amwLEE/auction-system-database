@@ -108,16 +108,29 @@
     <p class="lead">Current bid: £<?php echo(number_format($current_price, 2)) ?></p>
 
     <!-- Bidding form -->
-    <?php if ($account_type == 0): ?>
-      <form method="POST" action="place_bid.php">
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">£</span>
-          </div>
-        <input type="number" class="form-control" id="bid">
+  <?php if ($account_type == 0): ?>
+    <form method="POST" action="#">
+      <div class= "message">
+        <?php
+          include 'place_bid.php';                    
+          global $error_msg;
+          if (isset($success) && ($success == true) ){
+            echo '<p style="color:green;">Your bid has been submitted successfully!<p>';
+          }else{
+            echo '<p style="color:red;">'.$error_msg.'</p>'; //display error message
+          }
+        ?>
+      </div>
+
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">£</span>
         </div>
-        <button type="submit" class="btn btn-primary form-control">Place bid</button>
-      </form>
+	    <input type="number" class="form-control" id="bid" name="bidPrice" placeholder="<?=number_format($current_price, 2)?>" min="<?=$current_price?>" step="0.01" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)">
+    </div>
+      <small id="bidPriceHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
+      <button type="submit" class="btn btn-primary form-control" name="submitBidForm" value="submitBidForm">Place bid</button>
+    </form>
     <?php endif ?>
 <?php endif ?>
 
