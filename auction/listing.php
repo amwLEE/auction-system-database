@@ -4,7 +4,7 @@
 
 <?php
   $url = $_SERVER['REQUEST_URI'];
-  if ($url == ("/auction/listing.php" || "/auction/listing")) {
+  if (!strpos($url, "listing.php?item_id=")) {
     echo "<h1>404 Not Found</h1>";
     echo "The page that you have requested could not be found.";
     exit;
@@ -18,7 +18,7 @@
   }
 
   // Get info from the URL:
-  $item_id = $_GET['item_id'];
+  $item_id = $_GET['item_id'] or die("<h1>404 Not Found</h1>The page that you have requested could not be found.");
 
   // TODO: Use item_id to make a query to the database.
   $query = "SELECT * FROM Auction WHERE itemID=$item_id";
