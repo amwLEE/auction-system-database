@@ -3,6 +3,13 @@
 <?php require("utilities.php")?>
 
 <div class="container">
+<br>
+
+<?php
+if (!(isset($_SESSION['logged_in']) && ($_SESSION['account_type']==1))) {
+  exit("<span style='color:red;'>Access denied: You do not have permission to view this page.</span>");
+}
+?>
 
 <h2 class="my-3">My listings</h2>
 
@@ -14,10 +21,6 @@
   // the shared "utilities.php" where they can be shared by multiple files.
 
   // TODO: Check user's credentials (cookie/session).
-  if (!(($_SESSION['logged_in']) && ($_SESSION['account_type']==1))) {
-    header("Location: index.php");
-    exit;
-  }
   $sellerID = $_SESSION['userID'];
 
   // TODO: Perform a query to pull up their auctions.
