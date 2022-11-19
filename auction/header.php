@@ -43,7 +43,7 @@
     echo '<a class="nav-link" href="logout.php">Logout</a>';
   }
   else {
-    echo '<button type="button" class="btn nav-link" data-toggle="modal" data-target="#loginModal">Login</button>';
+    echo '<a class="nav-link" href="login.php">Login</a>';
   }
 ?>
 
@@ -78,34 +78,3 @@
   </ul>
 </nav>
 
-<!-- Login modal -->
-<div class="modal fade" id="loginModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">Login</h4>
-      </div>
-
-      <!-- Modal body -->
-
-      <div class="modal-body">
-        <form method="POST" action="login_result.php">
-          <!-- no form validation yet -->
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="text" class="form-control" name="email" id="email" placeholder="Email">
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
-          </div>
-          <button type="submit" name="loginForm" class="btn btn-primary form-control">Sign in</button>
-        </form>
-        <div class="text-center">or <a href="register.php">create an account</a></div>
-      </div>
-
-    </div>
-  </div>
-</div> <!-- End modal -->

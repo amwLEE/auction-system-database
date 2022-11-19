@@ -24,27 +24,32 @@ if (isset($_POST['loginForm'])){
             if ($result->num_rows > 0) {
                 // output data of each row
                 while($row = $result->fetch_assoc()) {
-                    echo "email: ". $row["email"].". First Name: ".$row['firstName'];
-                    echo "Log in successful";
+
+                    $account_type = $row["account_type"];
+                    
+                    if ($account_type == 0){
+                        $_SESSION['account_type'] = 'buyer';
+                    }else{
+                        $_SESSION['account_type'] = 'seller';
+                    }
 
                     // start session
+                    $log_success = true;
                     $_SESSION['logged_in'] = true;
                     $_SESSION['email'] = $email;
 
-                     //Redirect to index after 5 seconds
-                    header("refresh:5;url=index.php");
+                    
+                    
 
                 }
               } else {
-                echo "0 results";
+                $login_error = "Wrong email or password.";
               }
         
     }
 
 }
-else{
-    $login_error =  'Log in unsuccesful';
-}
+
 $connection->close();
 
 // session_start();
