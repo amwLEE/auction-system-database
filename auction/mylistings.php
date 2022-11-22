@@ -6,7 +6,7 @@
 <br>
 
 <?php
-if (!(isset($_SESSION['logged_in']) && ($_SESSION['account_type']==1))) {
+if (!(isset($_SESSION['logged_in']) && ($_SESSION['account_type']=='seller'))) {
   exit("<span style='color:red;'>Access denied: You do not have permission to view this page.</span>");
 }
 ?>

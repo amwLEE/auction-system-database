@@ -14,7 +14,7 @@
   if (isset($_SESSION['logged_in'])==1) {
     $account_type = $_SESSION['account_type'];
   } else {
-    $account_type = 0;
+    $account_type = 'buyer';
   }
 
   // Get info from the URL:
@@ -83,7 +83,7 @@
 <?php
   /* The following watchlist functionality uses JavaScript, but could
      just as easily use PHP as in other places in the code */
-  if (($now < $end_time) && ($account_type == 0)):
+  if (($now < $end_time) && ($account_type == 'buyer')):
 ?>
     <div id="watch_nowatch" <?php if ($has_session && $watching) echo('style="display: none"');?> >
       <button type="button" class="btn btn-outline-secondary btn-sm" onclick="addToWatchlist()">+ Add to watchlist</button>
@@ -118,7 +118,7 @@
 <?php else: ?>
      Auction ends <?php echo(date_format($end_time, 'j M Y H:i') . $time_remaining) ?></p>  
       
-    <?php if ($account_type == 0): ?>
+    <?php if ($account_type == 'buyer'): ?>
       <p class="lead">
       <?php
       if ($num_bids>0) {
@@ -158,7 +158,7 @@
   <?php endif ?>
 <?php endif ?>
 
-<?php if ($account_type == 1): ?>
+<?php if ($account_type == 'seller'): ?>
   <p class="lead"><?php echo 'Starting price: £' . number_format($starting_price, 2); ?></p>
   <p class="lead"><?php echo 'Reserve price: £' . number_format($reserve_price, 2); ?></p>
   <p class="lead">

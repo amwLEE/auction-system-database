@@ -27,11 +27,19 @@ if (isset($_POST['loginForm'])){
                     echo "email: ". $row["email"].". First Name: ".$row['firstName'];
                     echo "Log in successful";
 
+                    $account_type = $row["account_type"];
+                    
+                    if ($account_type == 0){
+                        $_SESSION['account_type'] = 'buyer';
+                    }else{
+                        $_SESSION['account_type'] = 'seller';
+                    }
+
                     // start session
+                    $log_success = true;
                     $_SESSION['logged_in'] = true;
                     $_SESSION['email'] = $email;
                     $_SESSION['userID'] = $row['userID'];
-                    $_SESSION['account_type'] = $row['account_type'];
 
                     //Redirect to index after 5 seconds
                     header("refresh:5;url=index.php");
