@@ -81,7 +81,7 @@
   }
   $recommendation = implode(',', $arr);
 
-  $query = "SELECT * FROM Auction WHERE itemID IN ($recommendation) ORDER BY FIELD(itemID,$recommendation)";
+  $query = "SELECT * FROM Auction a, Category c WHERE itemID IN ($recommendation) AND a.categoryID = c.categoryID ORDER BY FIELD(itemID,$recommendation)";
   $result = mysqli_query($connection, $query);
   
   // Loop through results and print them out as list items.
@@ -89,6 +89,7 @@
     $item_id = intval($listing['itemID']);
     $title = $listing['itemName'];
     $desc = $listing['itemDescription'];
+    $category = $listing['categoryName'];
     $end_time = new DateTime($listing['endDateTime']);
     
     $mybids = mysqli_query($connection, "SELECT * FROM Bid WHERE itemID=$item_id");
@@ -99,7 +100,19 @@
       $num_bids = 0;
       $price = 0;
     }
-    print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time);
+
+    $now = new DateTime();
+    if ($now > $end_time) {
+      if ($price > $listing['reservePrice']) {
+        $status = 'Sold';
+      } else {
+        $status = 'Not sold';
+      }
+    } else {
+      $status = 'In progress';
+    }
+
+    print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time, $category, $status);
   }
 
   // Close the connection as soon as it's no longer needed

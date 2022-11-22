@@ -51,8 +51,6 @@
     $current_price = $starting_price-0.01;
   }
 
-  echo "<h3><mark style='background: yellow'>$category_name</mark></h3>";
-
   // TODO: Note: Auctions that have ended may pull a different set of data,
   //       like whether the auction ended in a sale or was cancelled due
   //       to lack of high-enough bids. Or maybe not.
@@ -99,10 +97,26 @@
 <div class="row"> <!-- Row #2 with auction description + bidding info -->
   <div class="col-sm-8"> <!-- Left col with item info -->
 
+  <?php
+  mysqli_data_seek($result, 0);
+  if ($now > $end_time) {
+    if ($num_bids == 0) {
+      $status = 'Not sold';
+    } elseif ($current_price < $auction['reservePrice']) {
+      $status = 'Not sold';
+    } else {
+      $status = 'Sold';
+    }
+  } else {
+    $status = 'In progress';
+  }
+  ?>
+
     <div class="itemDescription">
       <?php echo($description); ?>
+      <?php echo "<div><mark style='background: lightblue'>$category_name</mark> <mark style='background: pink'>$status</mark></div>"; ?>
     </div>
-
+    
     <div>
       <img src="https://image.shutterstock.com/image-vector/coming-soon-grunge-rubber-stamp-260nw-196970096.jpg" alt="Coming soon">
     </div>
@@ -119,14 +133,12 @@
      Auction ends <?php echo(date_format($end_time, 'j M Y H:i') . $time_remaining) ?></p>  
       
     <?php if ($account_type == 'buyer'): ?>
+      <p class="lead"><?php echo 'Starting price: £' . number_format($starting_price, 2); ?></p>
       <p class="lead">
       <?php
       if ($num_bids>0) {
         echo 'Current bid: £';
         echo(number_format($current_price, 2));
-      } else {
-        echo 'Starting price: £';
-        echo(number_format($starting_price, 2));
       }
       ?>
       

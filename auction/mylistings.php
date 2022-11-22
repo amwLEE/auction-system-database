@@ -27,7 +27,7 @@
   // the shared "utilities.php" where they can be shared by multiple files.
 
   // Perform a query to pull up their auctions.
-  $query = "SELECT * FROM Auction WHERE sellerID=$sellerID ORDER BY itemID DESC";
+  $query = "SELECT * FROM Auction a, Category c WHERE sellerID=$sellerID AND c.categoryID = a.categoryID ORDER BY itemID DESC";
   $mylistings = mysqli_query($connection, $query);
 
   // Loop through results and print them out as list items.
@@ -36,6 +36,7 @@
     $title = $listing['itemName'];
     $desc = $listing['itemDescription'];
     $end_time = new DateTime($listing['endDateTime']);
+    $category = $listing['categoryName'];
     
     $query = "SELECT * FROM Bid WHERE itemID=$item_id ORDER BY bidID DESC";
     $mybids = mysqli_query($connection, $query);
@@ -51,15 +52,15 @@
     $now = new DateTime();
     if ($now > $end_time) {
       if ($price > $listing['reservePrice']) {
-        echo "<mark>Sold</mark>";
+        $status = 'Sold';
       } else {
-        echo "<mark>Not sold</mark>";
+        $status = 'Not sold';
       }
     } else {
-      echo "<mark>In progress</mark>";
+      $status = 'In progress';
     }
 
-    print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time);
+    print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time, $category, $status);
   }
 
   // Close the connection as soon as it's no longer needed
