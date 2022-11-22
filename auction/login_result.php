@@ -37,6 +37,7 @@ if (isset($_POST['loginForm'])){
                     $log_success = true;
                     $_SESSION['logged_in'] = true;
                     $_SESSION['email'] = $email;
+                    $_SESSION['userID'] = $row['userID'];
 
                     
                     

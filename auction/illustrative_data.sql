@@ -113,7 +113,7 @@ VALUES
     ("Jane Palmer Art original", "Still Life Oil painting , Lemon And Lime Slices", 37, 1, TIMESTAMP("2022-11-10 21:26:01"), TIMESTAMP("2023-01-09 12:00:00"), 420.00, 500.00),
     ("KENWOOD Prospero+", "KHC29.H0SI 4-in-1 Stand Mixer - Silver", 4, 5, TIMESTAMP("2022-11-11 04:22:34"), TIMESTAMP("2022-12-31 23:59:59"), 150.00, 150.00),
     ("Bedside Cabinet", "Wooden Scandi Legs Modern Bedroom Furniture", 15, 4, TIMESTAMP("2022-11-11 10:00:00"), TIMESTAMP("2023-01-31 12:00:00"), 55.00, 55.00),
-    ("Countertop Blender", "Onyx Black 5 Speeds", 29, 5, TIMESTAMP("2022-11-14 05:53:33"), TIMESTAMP("2022-01-30 11:59:59"), 120.00, 120.00),
+    ("Countertop Blender", "Onyx Black 5 Speeds", 29, 5, TIMESTAMP("2022-11-14 05:53:33"), TIMESTAMP("2023-01-30 11:59:59"), 120.00, 120.00),
     ("ALBERTA FERRETTI Women's Jacket", "size UK 8", 11, 3, TIMESTAMP("2022-11-14 08:00:00"), TIMESTAMP("2022-11-30 23:59:59"), 25.00, 120.00),
     ("WINDOWS 11 Lenovo ThinkPad", "X250 Core i5 8GB Ram 240GB SSD Laptop", 9, 2, TIMESTAMP("2022-11-15 00:00:00"), TIMESTAMP("2023-01-20 23:59:59"), 120.00, 120.00),
     ("Gaming PC Quad", "Core i7 3.40 GHz GTX 1630 16GB DDR3 2TB HDD 480GB SSD Windows 11", 40, 2, TIMESTAMP("2022-11-15 05:32:40"), TIMESTAMP("2023-01-09 00:00:00"), 200.00, 270.00),
@@ -123,8 +123,8 @@ VALUES
     ("NICCE Mens Vestival Utility Vest", "No Sleeves Jacket Coat Summer Jacket in Black", 2, 3, TIMESTAMP("2022-11-17 09:00:00"), TIMESTAMP("2023-01-01 23:00:00"), 35.00, 60.00),
     ("Mens African Dashiki Ethnic Shirts", "Long Sleeve Short Kaftan Blouse Tops", 42, 3, TIMESTAMP("2022-11-17 12:52:23"), TIMESTAMP("2023-01-09 23:59:59"), 14.99, 14.99),
     ("Painting Abstract Circle Hilma Af Klint 1915", "No 14 Swan Framed Art 12x16 Inch", 1, 1, TIMESTAMP("2022-11-17 23:05:27"), TIMESTAMP("2023-01-31 23:59:59"), 25.00, 25.00),
-    ("Mini Food Chopper", "Food Processor Empire Red", 45, 5, TIMESTAMP("2022-11-18 19:22:35"), TIMESTAMP("2022-01-12 12:00:00"), 42.00, 79.00),
-    ("Gaming PC", "Refurbished by Professionals", 29, 2, TIMESTAMP("2022-11-18 23:22:56"), TIMESTAMP("2022-01-31 23:59:59"), 200.00, 230.00);
+    ("Mini Food Chopper", "Food Processor Empire Red", 45, 5, TIMESTAMP("2022-11-18 19:22:35"), TIMESTAMP("2023-01-12 12:00:00"), 42.00, 79.00),
+    ("Gaming PC", "Refurbished by Professionals", 29, 2, TIMESTAMP("2022-11-18 23:22:56"), TIMESTAMP("2023-01-31 23:59:59"), 200.00, 230.00);
 
 -- Insert illustrative data for bid
 INSERT INTO Bid (itemID, buyerID, bidTimeStamp, bidPrice)  
@@ -158,7 +158,7 @@ VALUES
     (32, 35, TIMESTAMP("2022-11-06 01:43:44"), 400.00),
     (32, 24, TIMESTAMP("2022-11-06 09:00:03"), 500.00),
     (25, 25, TIMESTAMP("2022-11-07 04:52:36"), 90.00),
-    (32, 13, TIMESTAMP("2022-11-07 04:56:33"), 440.00),
+    (32, 13, TIMESTAMP("2022-11-07 04:56:33"), 540.00),
     (30, 6, TIMESTAMP("2022-11-07 12:44:55"), 1200.00),
     (38, 34, TIMESTAMP("2022-11-12 04:39:40"), 55.00),
     (38, 39, TIMESTAMP("2022-11-12 17:03:49"), 80.00),
