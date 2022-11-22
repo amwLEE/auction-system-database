@@ -1,8 +1,24 @@
-CREATE DATABASE Auction
+DROP DATABASE IF EXISTS AuctionDB;
+
+CREATE DATABASE AuctionDB
     DEFAULT CHARACTER SET utf8
     DEFAULT COLLATE utf8_general_ci;
 
-USE Auction;
+
+
+USE AuctionDB;
+
+
+-- Create admin account for database
+DROP USER IF EXISTS 'adbadmin'@'localhost';
+FLUSH PRIVILEGES;
+
+CREATE USER 'adbadmin'@'localhost'
+	IDENTIFIED BY 'Group10'; -- This is the password
+
+GRANT ALL PRIVILEGES
+    ON AuctionDB.*
+    TO 'adbadmin'@'localhost';
 
 -- Create table for users
 
@@ -10,10 +26,11 @@ DROP TABLE IF EXISTS Users;
 CREATE TABLE Users
 (
     userID INT AUTO_INCREMENT PRIMARY KEY,
-    firstName VARCHAR(64) NULL,
-    lastName VARCHAR(64) NULL,
+    firstName VARCHAR(64) NOT NULL,
+    lastName VARCHAR(64) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(100) NOT NULL,
+    userPassword VARCHAR(100) NOT NULL,
+    account_type BOOLEAN NOT NULL,
     CHECK (email LIKE '%_@__%.__%')
 )
 ENGINE = InnoDB;
@@ -53,7 +70,7 @@ CREATE TABLE Bid
     bidID INT AUTO_INCREMENT PRIMARY KEY,
     itemID INT,
     buyerID INT,
-    timestamp TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    bidTimeStamp TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     bidPrice DECIMAL(12,2) NOT NULL,
     FOREIGN KEY (itemID) REFERENCES Auction(itemID),
     FOREIGN KEY (buyerID) REFERENCES Users(userID)

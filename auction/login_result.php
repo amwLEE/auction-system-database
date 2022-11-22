@@ -8,6 +8,8 @@
 
 include 'database.php';
 
+session_start();
+
 if (isset($_POST['loginForm'])){
 
     $email = mysqli_real_escape_string($connection, $_POST['email']);
@@ -16,26 +18,38 @@ if (isset($_POST['loginForm'])){
     if ($email == "" || $password == ""){
         $login_error = "Please fill in all required fields";
     }else{
-        $query = "SELECT * FROM Users WHERE email='{$email}' AND password = SHA('$password')";
+        $query = "SELECT * FROM Users WHERE email='{$email}' AND userPassword = SHA('$password')";
         $result = mysqli_query($connection, $query);
         
-            // something wrong here.
             if ($result->num_rows > 0) {
                 // output data of each row
                 while($row = $result->fetch_assoc()) {
-                    echo "email: ". $row["email"].". First Name: ".$row['firstName'];
+
+                    $account_type = $row["account_type"];
+                    
+                    if ($account_type == 0){
+                        $_SESSION['account_type'] = 'buyer';
+                    }else{
+                        $_SESSION['account_type'] = 'seller';
+                    }
+
+                    // start session
+                    $log_success = true;
+                    $_SESSION['logged_in'] = true;
+                    $_SESSION['email'] = $email;
+
+                    
+                    
 
                 }
               } else {
-                echo "0 results";
+                $login_error = "Wrong email or password.";
               }
         
     }
 
 }
-else{
-    $login_error =  'Log in unsuccesful';
-}
+
 $connection->close();
 
 // session_start();
@@ -45,7 +59,6 @@ $connection->close();
 
 // echo('<div class="text-center">You are now logged in! You will be redirected shortly.</div>');
 
-// Redirect to index after 5 seconds
-// header("refresh:5;url=index.php");
+
 
 ?>
