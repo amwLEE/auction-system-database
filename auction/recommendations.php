@@ -2,15 +2,21 @@
 <?php require("database.php");?>
 <?php require("utilities.php")?>
 
-<div class="container">
-<br>
-
 <?php
-if (!(isset($_SESSION['logged_in']) && ($_SESSION['account_type']=='buyer'))) {
-  exit("<span style='color:red;'>Access denied: You do not have permission to view this page.</span>");
-}
+  // Check user's credentials from session
+  // Extract user ID from buyer accounts and deny access to all other account types
+  if (isset($_SESSION['account_type'])) {
+    if ($_SESSION['account_type'] == 'buyer') {
+      $buyerID = $_SESSION['userID'];
+    } else {
+      exit("<h5 class='access_denied'>Access denied: You do not have permission to view this page.</h5>");
+    }
+  } else {
+    exit("<h5 class='access_denied'>Access denied: You do not have permission to view this page.</h5>");
+  }
 ?>
 
+<div class="container">
 <h2 class="my-3">Recommendations for you</h2>
 
 <?php
@@ -19,11 +25,8 @@ if (!(isset($_SESSION['logged_in']) && ($_SESSION['account_type']=='buyer'))) {
   // search bar. This can be started after browse.php is working with a database.
   // Feel free to extract out useful functions from browse.php and put them in
   // the shared "utilities.php" where they can be shared by multiple files.
-  
-  // TODO: Check user's credentials (cookie/session).
-  $buyerID = $_SESSION['userID'];
 
-  // TODO: Perform a query to pull up auctions they might be interested in.
+  // Perform a query to pull up auctions they might be interested in.
   $query = "SELECT itemID, COUNT(itemID) FROM Bid WHERE buyerID=$buyerID GROUP BY itemID ORDER BY bidTimeStamp DESC";
   $result = mysqli_query($connection, $query);
   $arr = array();
@@ -81,7 +84,7 @@ if (!(isset($_SESSION['logged_in']) && ($_SESSION['account_type']=='buyer'))) {
   $query = "SELECT * FROM Auction WHERE itemID IN ($recommendation) ORDER BY FIELD(itemID,$recommendation)";
   $result = mysqli_query($connection, $query);
   
-  // TODO: Loop through results and print them out as list items.
+  // Loop through results and print them out as list items.
   while ($listing = mysqli_fetch_assoc($result)){
     $item_id = intval($listing['itemID']);
     $title = $listing['itemName'];
@@ -98,6 +101,9 @@ if (!(isset($_SESSION['logged_in']) && ($_SESSION['account_type']=='buyer'))) {
     }
     print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time);
   }
+
+  // Close the connection as soon as it's no longer needed
+  mysqli_close($connection);
 ?>
 
 <?php include_once("footer.php")?>

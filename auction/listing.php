@@ -51,7 +51,7 @@
     $current_price = $starting_price-0.01;
   }
 
-  echo "<mark>$category_name</mark>";
+  echo "<h3><mark style='background: yellow'>$category_name</mark></h3>";
 
   // TODO: Note: Auctions that have ended may pull a different set of data,
   //       like whether the auction ended in a sale or was cancelled due
@@ -216,6 +216,8 @@ if ($now > $end_time) {
 } else {
   echo "This auction is still in progress";
 }
+// Close the connection as soon as it's no longer needed
+mysqli_close($connection);
 ?>
   
   </div> <!-- End of right col with bidding info -->

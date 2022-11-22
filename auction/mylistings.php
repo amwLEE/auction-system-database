@@ -2,15 +2,21 @@
 <?php require("database.php");?>
 <?php require("utilities.php")?>
 
-<div class="container">
-<br>
-
 <?php
-if (!(isset($_SESSION['logged_in']) && ($_SESSION['account_type']=='seller'))) {
-  exit("<span style='color:red;'>Access denied: You do not have permission to view this page.</span>");
-}
+  // Check user's credentials from session
+  // Extract user ID from seller accounts and deny access to all other account types
+  if (isset($_SESSION['account_type'])) {
+    if ($_SESSION['account_type'] == 'seller') {
+      $sellerID = $_SESSION['userID'];
+    } else {
+      exit("<h5 class='access_denied'>Access denied: You do not have permission to view this page.</h5>");
+    }
+  } else {
+    exit("<h5 class='access_denied'>Access denied: You do not have permission to view this page.</h5>");
+  }
 ?>
 
+<div class="container">
 <h2 class="my-3">My listings</h2>
 
 <?php
@@ -20,20 +26,20 @@ if (!(isset($_SESSION['logged_in']) && ($_SESSION['account_type']=='seller'))) {
   // Feel free to extract out useful functions from browse.php and put them in
   // the shared "utilities.php" where they can be shared by multiple files.
 
-  // TODO: Check user's credentials (cookie/session).
-  $sellerID = $_SESSION['userID'];
+  // Perform a query to pull up their auctions.
+  $query = "SELECT * FROM Auction WHERE sellerID=$sellerID ORDER BY itemID DESC";
+  $mylistings = mysqli_query($connection, $query);
 
-  // TODO: Perform a query to pull up their auctions.
-  $mylistings = mysqli_query($connection, "SELECT * FROM Auction WHERE sellerID=$sellerID ORDER BY itemID DESC");
-
-  // TODO: Loop through results and print them out as list items.
+  // Loop through results and print them out as list items.
   while ($listing = mysqli_fetch_assoc($mylistings)){
     $item_id = intval($listing['itemID']);
     $title = $listing['itemName'];
     $desc = $listing['itemDescription'];
     $end_time = new DateTime($listing['endDateTime']);
     
-    $mybids = mysqli_query($connection, "SELECT * FROM Bid WHERE itemID=$item_id ORDER BY bidID DESC");
+    $query = "SELECT * FROM Bid WHERE itemID=$item_id ORDER BY bidID DESC";
+    $mybids = mysqli_query($connection, $query);
+
     if (mysqli_num_rows($mybids) > 0){
       $num_bids = mysqli_num_rows($mybids);
       $price = mysqli_fetch_row($mybids)[4];
@@ -55,6 +61,9 @@ if (!(isset($_SESSION['logged_in']) && ($_SESSION['account_type']=='seller'))) {
 
     print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time);
   }
+
+  // Close the connection as soon as it's no longer needed
+  mysqli_close($connection);
 ?>
 
 <?php include_once("footer.php")?>
