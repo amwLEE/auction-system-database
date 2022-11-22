@@ -1,6 +1,9 @@
 <?php
 
-session_start();
+if(!isset($_SESSION)) 
+{ 
+    session_start(); 
+} 
 
 unset($_SESSION['logged_in']);
 unset($_SESSION['account_type']);

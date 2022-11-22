@@ -1,14 +1,9 @@
 <?php
-  // FIXME: At the moment, I've allowed these values to be set manually.
-  // But eventually, with a database, these should be set automatically
-  // ONLY after the user's login credentials have been verified via a 
-  // database query.
-  session_start();
-  
-  // $_SESSION['logged_in'] = false;
-  // $_SESSION['account_type'] = 'seller';
+  if(!isset($_SESSION)) 
+  { 
+      session_start(); 
+  } 
 ?>
-
 
 <!doctype html>
 <html lang="en">
@@ -56,7 +51,7 @@
       <a class="nav-link" href="browse.php">Browse</a>
     </li>
 <?php
-  // if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'buyer') {
+  if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'buyer') {
   echo('
 	<li class="nav-item mx-1">
       <a class="nav-link" href="mybids.php">My Bids</a>
@@ -64,8 +59,8 @@
 	<li class="nav-item mx-1">
       <a class="nav-link" href="recommendations.php">Recommended</a>
     </li>');
-  // }
-  // if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'seller') {
+  }
+  if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'seller') {
   echo('
 	<li class="nav-item mx-1">
       <a class="nav-link" href="mylistings.php">My Listings</a>
@@ -73,7 +68,7 @@
 	<li class="nav-item ml-3">
       <a class="nav-link btn border-light" href="create_auction.php">+ Create auction</a>
     </li>');
-  // }
+  }
 ?>
   </ul>
 </nav>

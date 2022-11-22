@@ -3,7 +3,7 @@
 <div class="container">
   <h2 class="my-3">Register new account</h2>
 
-  <!-- Create auction form -->
+  <!-- Create registration form -->
   <form method="POST" action="register.php">
     <div class="message">
       <?php

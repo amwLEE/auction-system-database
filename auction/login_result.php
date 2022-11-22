@@ -8,7 +8,10 @@
 
 include 'database.php';
 
-session_start();
+if(!isset($_SESSION)) 
+{ 
+    session_start(); 
+} 
 
 if (isset($_POST['loginForm'])){
 
@@ -38,8 +41,6 @@ if (isset($_POST['loginForm'])){
                     $_SESSION['logged_in'] = true;
                     $_SESSION['email'] = $email;
 
-                    
-                    
 
                 }
               } else {
