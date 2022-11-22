@@ -3,7 +3,7 @@ include 'database.php';
 
 $errors = array();
 
-// following code only executes if 'submit' button is pressed - avoids some errors
+// following code only executes if 'Register' button is pressed - avoids some errors
 if (isset($_POST['submit']))
 {
     $email = mysqli_real_escape_string($connection, $_POST['email']);
@@ -70,4 +70,3 @@ if (isset($_POST['submit']))
         $success = false;
     }
 }
-?>
