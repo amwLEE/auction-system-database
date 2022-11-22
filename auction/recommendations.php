@@ -24,25 +24,53 @@ if (!(isset($_SESSION['logged_in']) && ($_SESSION['account_type']==0))) {
   $buyerID = $_SESSION['userID'];
 
   // TODO: Perform a query to pull up auctions they might be interested in.
-  $query = "SELECT * FROM Bid WHERE buyerID=$buyerID";
+  $query = "SELECT itemID, COUNT(itemID) FROM Bid WHERE buyerID=$buyerID GROUP BY itemID ORDER BY bidTimeStamp DESC";
   $result = mysqli_query($connection, $query);
   $arr = array();
-  if (mysqli_num_rows($result) == 0){
-    echo "You have not bid on any items so far, check out these trending auction listings.";
+  if (mysqli_num_rows($result) != 0){
+    $myitems = array();
+    while ($x = mysqli_fetch_assoc($result)){
+      $myitems[] = $x['itemID'];
+    }
+    $myitems = implode(',', $myitems);
+
+    $query = "SELECT buyerID, COUNT(buyerID)
+              FROM Bid
+              WHERE (buyerID<>$buyerID) AND (itemID IN ($myitems))
+              GROUP BY buyerID
+              ORDER BY COUNT(buyerID) DESC";
+    $result = mysqli_query($connection, $query);
+    $myneighbours = array();
+    while ($y = mysqli_fetch_assoc($result)){
+      $myneighbours[] = $y['buyerID'];
+    }
+    $myneighbours = implode(',', $myneighbours);
+
+    $query = "SELECT itemID, COUNT(itemID)
+              FROM Bid b
+              WHERE (buyerID IN ($myneighbours)) AND (itemID NOT IN ($myitems)) AND (SELECT endDateTime FROM Auction a WHERE a.itemID=b.itemID)>NOW()
+              GROUP BY itemID
+              ORDER BY COUNT(itemID) DESC
+              LIMIT 0,5";
+    $result = mysqli_query($connection, $query);
+    while ($z = mysqli_fetch_assoc($result)){
+      $arr[] = $z['itemID'];
+    }
+    if ($arr) {
+      echo "You might want to bid on the sorts of things other people, who have also bid on the sorts of things you have previously bid on, are currently bidding on.";
+    }
+  }
+  
+  if (!$arr) {
+    if (mysqli_num_rows($result) == 0) {
+      echo "Check out these trending auction listings.";
+    }
     $query = "SELECT b.itemID, COUNT(b.itemID)
               FROM Auction a, Bid b
               WHERE a.itemID=b.itemID AND a.endDateTime>NOW()
               GROUP BY b.itemID
               ORDER BY COUNT(b.itemID) DESC, b.bidTimeStamp DESC, a.endDateTime ASC
               LIMIT 0,5";
-    $result = mysqli_query($connection, $query);
-    while ($listing = mysqli_fetch_assoc($result)){
-      $arr[] = $listing['itemID'];
-    }
-  } else {
-    // This section is hard coded for now
-    echo "Based on your bid history, you may be interested in the following auction listings.";
-    $query = "SELECT * FROM Auction WHERE endDateTime>NOW() LIMIT 0,5";
     $result = mysqli_query($connection, $query);
     while ($listing = mysqli_fetch_assoc($result)){
       $arr[] = $listing['itemID'];
