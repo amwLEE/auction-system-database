@@ -59,25 +59,56 @@
     while ($z = mysqli_fetch_assoc($result)){
       $arr[] = $z['itemID'];
     }
+    $recommendation = implode(',', $arr);
     if ($arr) {
       echo "You might want to bid on the sorts of things other people, who have also bid on the sorts of things you have previously bid on, are currently bidding on.";
+      $query = "SELECT * FROM Auction a, Category c WHERE itemID IN ($recommendation) AND a.categoryID = c.categoryID ORDER BY FIELD(itemID,$recommendation)";
+      $result = mysqli_query($connection, $query);
+      
+      // Loop through results and print them out as list items.
+      while ($listing = mysqli_fetch_assoc($result)){
+        $item_id = intval($listing['itemID']);
+        $title = $listing['itemName'];
+        $desc = $listing['itemDescription'];
+        $category = $listing['categoryName'];
+        $end_time = new DateTime($listing['endDateTime']);
+        
+        $mybids = mysqli_query($connection, "SELECT * FROM Bid WHERE itemID=$item_id");
+        if (mysqli_num_rows($mybids) > 0){
+          $num_bids = mysqli_num_rows($mybids);
+          $price = mysqli_fetch_row($mybids)[4];
+        } else{
+          $num_bids = 0;
+          $price = 0;
+        }
+
+        $now = new DateTime();
+        if ($now > $end_time) {
+          if ($price > $listing['reservePrice']) {
+            $status = 'Sold';
+          } else {
+            $status = 'Not sold';
+          }
+        } else {
+          $status = 'In progress';
+        }
+
+        print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time, $category, $status);
+        echo "<br>";
+      }
     }
   }
   
-  if (!$arr) {
-    if (mysqli_num_rows($result) == 0) {
-      echo "Check out these trending auction listings.";
-    }
-    $query = "SELECT b.itemID, COUNT(b.itemID)
-              FROM Auction a, Bid b
-              WHERE a.itemID=b.itemID AND a.endDateTime>NOW()
-              GROUP BY b.itemID
-              ORDER BY COUNT(b.itemID) DESC, b.bidTimeStamp DESC, a.endDateTime ASC
-              LIMIT 0,5";
-    $result = mysqli_query($connection, $query);
-    while ($listing = mysqli_fetch_assoc($result)){
-      $arr[] = $listing['itemID'];
-    }
+  echo "Check out these trending auction listings.";
+  $query = "SELECT b.itemID, COUNT(b.itemID)
+            FROM Auction a, Bid b
+            WHERE a.itemID=b.itemID AND a.endDateTime>NOW()
+            GROUP BY b.itemID
+            ORDER BY COUNT(b.itemID) DESC, b.bidTimeStamp DESC, a.endDateTime ASC
+            LIMIT 0,5";
+  $result = mysqli_query($connection, $query);
+  while ($listing = mysqli_fetch_assoc($result)){
+    $arr[] = $listing['itemID'];
   }
   $recommendation = implode(',', $arr);
 
