@@ -1,11 +1,11 @@
-<?php include("login_result.php")?>
-
 <?php
-  // For now, index.php just redirects to browse.php, but you can change this
-  // if you like.
-  if (($_SESSION['logged_in']) && ($_SESSION['account_type']=='seller')) {
-    header("Location: mylistings.php"); // seller landing page
+  // Start new or resume existing session
+  session_start();
+
+  // index.php redirects to mylistings.php for seller accounts, or browse.php for buyer accounts and non-logged-in users.
+  if (($_SESSION['logged_in'] == true) && ($_SESSION['account_type'] == 'seller')) {
+    header("Location: mylistings.php");
   } else {
-    header("Location: browse.php"); // default landing page
+    header("Location: browse.php");
   }
 ?>
