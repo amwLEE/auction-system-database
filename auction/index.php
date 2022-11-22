@@ -9,7 +9,7 @@
     if ($_SESSION['account_type'] == 'seller') {
       header("Location: mylistings.php");
     } elseif ($_SESSION['account_type'] == 'buyer') {
-      header("Location: browse.php");
+      header("Location: recommendations.php");
     }
   } else {
     header("Location: browse.php");
