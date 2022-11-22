@@ -10,6 +10,8 @@ $item_id = $_POST['arguments'];
 if ($_POST['functionname'] == "add_to_watchlist") {
   // TODO: Update database and return success/failure.
 
+  //$query = "UPDATE Bid SET bidPrice = $bidPrice WHERE itemid = $itemID   ";
+
   $res = "success";
 }
 else if ($_POST['functionname'] == "remove_from_watchlist") {
