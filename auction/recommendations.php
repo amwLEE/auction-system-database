@@ -61,7 +61,7 @@
     }
     $recommendation = implode(',', $arr);
     if ($arr) {
-      echo "You might want to bid on the sorts of things other people, who have also bid on the sorts of things you have previously bid on, are currently bidding on.";
+      echo "<h5>You might want to bid on the sorts of things other people, who have also bid on the sorts of things you have previously bid on, are currently bidding on.</h5>";
       $query = "SELECT * FROM Auction a, Category c WHERE itemID IN ($recommendation) AND a.categoryID = c.categoryID ORDER BY FIELD(itemID,$recommendation)";
       $result = mysqli_query($connection, $query);
       
@@ -94,12 +94,12 @@
         }
 
         print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time, $category, $status);
-        echo "<br>";
+        echo "<br><br><br>";
       }
     }
   }
   
-  echo "Check out these trending auction listings.";
+  echo "<h5>Check out these trending auction listings.</h5>";
   $query = "SELECT b.itemID, COUNT(b.itemID)
             FROM Auction a, Bid b
             WHERE a.itemID=b.itemID AND a.endDateTime>NOW()
