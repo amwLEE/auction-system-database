@@ -1,15 +1,12 @@
 <?php include_once("header.php")?>
 <?php require("database.php");?>
 <?php include("watchlist_funcs.php")?>
-<?php require("utilities.php")?>
 
 <div class="container">
 
-<h2 class="my-3">Watchlist Items</h2>
+    <h2 class="my-3">Watchlist Items</h2>
 
-
-
-<?php
+    <?php
     $userID = $_SESSION['userID'];    
     $query = "SELECT * FROM Watch where userID = '{$userID}'";
 
@@ -17,40 +14,38 @@
 
     if (mysqli_num_rows($result) == 0 ){
         echo "No items in watchlist";
+    }else{
+        while($watchlist = mysqli_fetch_assoc($result)){
+
+            $itemID = $watchlist['itemID'];
+
+            // retrieving items on watchlist
+            $query= "SELECT * FROM Auction a, Category c WHERE c.categoryID=a.categoryID AND itemID = '{$itemID}'";
+            $watchresult = mysqli_query($connection, $query);
+    
+            $auction = mysqli_fetch_assoc($watchresult);
+            
+            $title = $auction['itemName'];
+            $description = $auction['itemDescription'];
+            $category_name = $auction['categoryName'];
+            $end_time = new DateTime($auction['endDateTime']);
+            $starting_price = $auction['startingPrice'];
+            $reserve_price = $auction['reservePrice'];
+            $time_remaining = 3;
+    
+            echo('
+            <li class="list-group-item d-flex justify-content-between">
+              <div class="p-2 mr-5"><h5><a href="listing.php?item_id=' . $itemID . '">' . $title . '</a></h5>' . $description . '<br/><mark style="background: lightblue;">' . $category_name . '</mark>' . ' ' . '<mark style="background: pink;" > £' . $starting_price . '</mark></div>
+            </li>
+          ');
+
+        }
+        mysqli_close($connection);
     }
-        $watchlist = mysqli_fetch_assoc($result);
-        $itemID = $watchlist['itemID'];
-
-
-        // retrieving items on watchlist
-        $query= "SELECT * FROM Auction WHERE itemID = '{$itemID}'";
-        $result = mysqli_query($connection, $query);
-
-        $auction = mysqli_fetch_assoc($result);
+      
         
-        $title = $auction['itemName'];
-        $description = $auction['itemDescription'];
-        $category_name = $category['categoryName'];
-        $end_time = new DateTime($auction['endDateTime']);
-        $starting_price = $auction['startingPrice'];
-        $reserve_price = $auction['reservePrice'];
-
-
-
 
 ?>
 
-<div class="container">
 
-    <div class="row">
-        <!-- Row #1 with auction title + watch button -->
-        <div class="col-sm-8">
-            <!-- Left col -->
-            <h2 class="my-3"><?php echo($title); ?></h2>
-        </div>
-        <div class="col-sm-4 align-self-center">
-</div>
-
-
-
-<?php include_once("footer.php")?>
+    <?php include_once("footer.php")?>

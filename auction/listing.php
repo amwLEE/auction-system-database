@@ -13,11 +13,12 @@
   // Check user's credentials (cookie/session).
   if (isset($_SESSION['logged_in'])==1) {
     $account_type = $_SESSION['account_type'];
+    $userID = $_SESSION['userID'];
   } else {
     $account_type = 'buyer';
   }
 
-  $userID = $_SESSION['userID'];
+  
 
   // Get info from the URL:
   $item_id = $_GET['item_id'] or die("<h1>404 Not Found</h1>The page that you have requested could not be found.");
@@ -68,8 +69,23 @@
   // TODO: If the user has a session, use it to make a query to the database
   //       to determine if the user is already watching this item.
   //       For now, this is hardcoded.
-  $has_session = true;
-  $watching = false;  
+
+  if ($_SESSION["logged_in"]==1){
+    $query = "SELECT * FROM Watch WHERE userID = $userID";
+    $result = mysqli_query($connection, $query);
+    $has_session = true;
+
+    if (mysqli_num_rows($result) == 0 ){
+      $watching = false;
+      
+    }else{
+      $watching = true;
+    }
+
+
+  } 
+  $has_session = false;
+
 ?>
 
 

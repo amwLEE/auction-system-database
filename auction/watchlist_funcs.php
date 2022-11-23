@@ -36,4 +36,9 @@ else if ($_POST['functionname'] == "remove_from_watchlist") {
 // echo json_encode($res).
 echo json_encode($res);
 
+// Close the connection as soon as it's no longer needed
+mysqli_close($connection);
+
+
+
 ?>

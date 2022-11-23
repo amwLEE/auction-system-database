@@ -29,7 +29,7 @@
   // Perform a query to pull up the auctions they've bidded on.
   $query = "SELECT *, MAX(b.bidTimeStamp), MAX(b.bidPrice)
             FROM Auction a, Bid b, Category c
-            WHERE b.buyerID=6 AND a.itemID=b.itemID AND c.categoryID=a.categoryID
+            WHERE b.buyerID=$buyerID AND a.itemID=b.itemID AND c.categoryID=a.categoryID
             GROUP BY b.itemID
             ORDER BY MAX(b.bidTimeStamp) DESC";
   $mylistings = mysqli_query($connection, $query);
