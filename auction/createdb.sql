@@ -76,3 +76,15 @@ CREATE TABLE Bid
     FOREIGN KEY (buyerID) REFERENCES Users(userID)
 )
 ENGINE = InnoDB;
+
+DROP TABLE IF EXISTS Watch;
+
+CREATE TABLE Watch
+(
+    watchID INT AUTO_INCREMENT PRIMARY KEY,
+    userID INT NOT NULL,
+    itemID INT NOT NULL,
+    FOREIGN KEY (userID) REFERENCES Users(userID),
+    FOREIGN KEY (itemID) REFERENCES Auction(itemID)
+)
+ENGINE = InnoDB;
