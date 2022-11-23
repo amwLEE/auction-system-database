@@ -8,9 +8,9 @@
 
     <?php
     $userID = $_SESSION['userID'];    
-    $query = "SELECT * FROM Watch where userID = '{$userID}'";
+    $getUserQuery = "SELECT * FROM Watch where userID = '{$userID}'";
 
-    $result = mysqli_query($connection, $query);
+    $result = mysqli_query($connection, $getUserQuery);
 
     if (mysqli_num_rows($result) == 0 ){
         echo "No items in watchlist";
@@ -23,14 +23,14 @@
             $query= "SELECT * FROM Auction a, Category c WHERE c.categoryID=a.categoryID AND itemID = '{$itemID}'";
             $watchresult = mysqli_query($connection, $query);
     
-            $auction = mysqli_fetch_assoc($watchresult);
+            $auctionWatch = mysqli_fetch_assoc($watchresult);
             
-            $title = $auction['itemName'];
-            $description = $auction['itemDescription'];
-            $category_name = $auction['categoryName'];
-            $end_time = new DateTime($auction['endDateTime']);
-            $starting_price = $auction['startingPrice'];
-            $reserve_price = $auction['reservePrice'];
+            $title = $auctionWatch['itemName'];
+            $description = $auctionWatch['itemDescription'];
+            $category_name = $auctionWatch['categoryName'];
+            $end_time = new DateTime($auctionWatch['endDateTime']);
+            $starting_price = $auctionWatch['startingPrice'];
+            $reserve_price = $auctionWatch['reservePrice'];
             $time_remaining = 3;
     
             echo('

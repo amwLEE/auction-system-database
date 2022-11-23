@@ -14,18 +14,17 @@ if (!isset($_POST['functionname']) || !isset($_POST['itemID']) || !isset($_POST[
 
 if ($_POST['functionname'] == "add_to_watchlist") {
   // TODO: Update database and return success/failure.
-  $query = "INSERT INTO Watch(userID, itemID) VALUES('$userID', '$itemID')  ";
+  $addWatchQuery = "INSERT INTO Watch(userID, itemID) VALUES('$userID', '$itemID')  ";
 
   //$query = "UPDATE Auction SET watchList = 1 WHERE itemid = $item_id";
   
-  $insert = mysqli_query($connection,$query);
+  $addWatch = mysqli_query($connection,$addWatchQuery);
   $res = "success";
 }
 else if ($_POST['functionname'] == "remove_from_watchlist") {
   // TODO: Update database and return success/failure.
-  $query = "DELETE FROM Watch WHERE userID = '{$userID}' and itemID = '{$itemID}'";
-  $delete = mysqli_query($connection,$query);
-
+  $deleteWatchQuery = "DELETE FROM Watch WHERE userID = '{$userID}' and itemID = '{$itemID}'";
+  $deleteWatch = mysqli_query($connection,$deleteWatchQuery);
   
   $res = "success";
 }
