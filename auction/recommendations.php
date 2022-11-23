@@ -107,6 +107,7 @@
             ORDER BY COUNT(b.itemID) DESC, b.bidTimeStamp DESC, a.endDateTime ASC
             LIMIT 0,5";
   $result = mysqli_query($connection, $query);
+  $arr = array();
   while ($listing = mysqli_fetch_assoc($result)){
     $arr[] = $listing['itemID'];
   }
