@@ -101,20 +101,20 @@
   mysqli_data_seek($result, 0);
   if ($now > $end_time) {
     if ($num_bids == 0) {
-      $status = 'Not sold';
+      $status = '<mark style="background: red">Not sold</mark>';
     } elseif ($current_price < $auction['reservePrice']) {
-      $status = 'Not sold';
+      $status = '<mark style="background: red">Not sold</mark>';
     } else {
-      $status = 'Sold';
+      $status = '<mark style="background: green">Sold</mark>';
     }
   } else {
-    $status = 'In progress';
+    $status = '<mark style="background: orange">In progress</mark>';
   }
   ?>
 
     <div class="itemDescription">
       <?php echo($description); ?>
-      <?php echo "<div><mark style='background: lightblue'>$category_name</mark> <mark style='background: pink'>$status</mark></div>"; ?>
+      <?php echo "<div><mark style='background: lightblue'>$category_name</mark> $status</div>"; ?>
     </div>
     
     <div>
