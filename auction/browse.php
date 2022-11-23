@@ -113,9 +113,11 @@
   $current_price = 1;
   $num_bids = 1;
   $end_date = new DateTime('2001-01-01T11:00:00');
+  $category = 'Category1';
+  $status = 'Status1';
   
   // This uses a function defined in utilities.php
-  print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date);
+  print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date, $category, $status);
   
   $item_id = "2";
   $title = "Title2";
@@ -123,8 +125,10 @@
   $current_price = 2;
   $num_bids = 2;
   $end_date = new DateTime('2002-02-02T00:00:00');
+  $category = 'Category2';
+  $status = 'Status2';
   
-  print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date);
+  print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date, $category, $status);
 ?>
 
 </ul>
