@@ -100,11 +100,11 @@
   }
   
   echo "<h5>Check out these trending auction listings.</h5>";
-  $query = "SELECT b.itemID, COUNT(b.itemID)
+  $query = "SELECT b.itemID, COUNT(b.itemID), MAX(b.bidTimeStamp)
             FROM Auction a, Bid b
             WHERE a.itemID=b.itemID AND a.endDateTime>NOW()
             GROUP BY b.itemID
-            ORDER BY COUNT(b.itemID) DESC, b.bidTimeStamp DESC, a.endDateTime ASC
+            ORDER BY COUNT(b.itemID) DESC, MAX(b.bidTimeStamp) DESC, a.endDateTime ASC
             LIMIT 0,5";
   $result = mysqli_query($connection, $query);
   $arr = array();
