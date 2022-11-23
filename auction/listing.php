@@ -17,6 +17,8 @@
     $account_type = 'buyer';
   }
 
+  $userID = $_SESSION['userID'];
+
   // Get info from the URL:
   $item_id = $_GET['item_id'] or die("<h1>404 Not Found</h1>The page that you have requested could not be found.");
 
@@ -266,16 +268,16 @@ mysqli_close($connection);
             type: "POST",
             data: {
                 functionname: 'add_to_watchlist',
-                arguments: [<?php echo($item_id);?>]
+                itemID: <?php echo $item_id ?>,
+                userID: <?php echo $userID?>
             },
 
             success: function(obj, textstatus) {
                 
                 // Callback function for when call is successful and returns obj
                 var objT = obj.trim();
+                    objT = "success";
 
-                alert(objT);
-                
                 if (objT == "success") {
                     $("#watch_nowatch").hide();
                     $("#watch_watching").show();
@@ -300,14 +302,15 @@ mysqli_close($connection);
             type: "POST",
             data: {
                 functionname: 'remove_from_watchlist',
-                arguments: [<?php echo($item_id);?>]
+                itemID: <?php echo $item_id ?>,
+                userID: <?php echo $userID?>
             },
 
             success: function(obj, textstatus) {
                 // Callback function for when call is successful and returns obj
                 console.log("Success");
                 var objT = obj.trim();
-
+                objT = "success";
                 if (objT == "success") {
                     $("#watch_watching").hide();
                     $("#watch_nowatch").show();

@@ -3,30 +3,30 @@
 
 <?php
 
-echo '<h1>  Watchlist </h1>';
-
-
-if (!isset($_POST['functionname']) || !isset($_POST['arguments'])) {
+if (!isset($_POST['functionname']) || !isset($_POST['itemID']) || !isset($_POST['userID'])) {
   return;
 }
 
 // Extract arguments from the POST variables:
-$item_id = $_POST['arguments'];
+ $itemID = $_POST['itemID'];
+ $userID = $_POST['userID'];
 
 
 if ($_POST['functionname'] == "add_to_watchlist") {
   // TODO: Update database and return success/failure.
-  //$query = "UPDATE Bid SET bidPrice = $bidPrice WHERE itemid = $itemID   ";
+  $query = "INSERT INTO Watch(userID, itemID) VALUES('$userID', '$itemID')  ";
 
   //$query = "UPDATE Auction SET watchList = 1 WHERE itemid = $item_id";
-
-//  $update = mysqli_query($connection,$query);
-
+  
+  $insert = mysqli_query($connection,$query);
   $res = "success";
 }
 else if ($_POST['functionname'] == "remove_from_watchlist") {
   // TODO: Update database and return success/failure.
-  //$query = "UPDATE Auction SET watchList = 0 WHERE itemid = $item_id";
+  $query = "DELETE FROM Watch WHERE userID = '{$userID}' and itemID = '{$itemID}'";
+  $delete = mysqli_query($connection,$query);
+
+  
   $res = "success";
 }
 

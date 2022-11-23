@@ -40,6 +40,7 @@
   // current status (session).
   if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true) {
     echo '<a class="nav-link" href="logout.php">Logout</a>';
+    
   }
   else {
     echo '<a class="nav-link" href="login.php">Login</a>';
@@ -62,6 +63,9 @@
     </li>
 	<li class="nav-item mx-1">
       <a class="nav-link" href="recommendations.php">Recommended</a>
+    </li>
+    <li class="nav-item max-1">
+     <a class="nav-link" href="watchlist.php">Watch List</a>
     </li>');
   }
   if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'seller') {
