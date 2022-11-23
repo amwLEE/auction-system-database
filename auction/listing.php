@@ -71,11 +71,11 @@
   //       For now, this is hardcoded.
 
   if ($_SESSION["logged_in"]==1){
-    $query = "SELECT * FROM Watch WHERE userID = $userID";
-    $result = mysqli_query($connection, $query);
+    $queryWatch = "SELECT * FROM Watch WHERE userID = $userID and itemID = $item_id";
+    $resultWatch = mysqli_query($connection, $queryWatch);
     $has_session = true;
 
-    if (mysqli_num_rows($result) == 0 ){
+    if (mysqli_num_rows($resultWatch) == 0 ){
       $watching = false;
       
     }else{
@@ -83,8 +83,10 @@
     }
 
 
-  } 
-  $has_session = false;
+  }else{
+    $has_session = false;
+  }
+
 
 ?>
 
@@ -292,6 +294,7 @@ mysqli_close($connection);
                 
                 // Callback function for when call is successful and returns obj
                 var objT = obj.trim();
+                //hardcoded rn
                     objT = "success";
 
                 if (objT == "success") {

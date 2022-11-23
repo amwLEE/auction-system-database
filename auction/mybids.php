@@ -25,7 +25,7 @@
   // This can be started after browse.php is working with a database.
   // Feel free to extract out useful functions from browse.php and put them in
   // the shared "utilities.php" where they can be shared by multiple files.
-  
+
   // Perform a query to pull up the auctions they've bidded on.
   $query = "SELECT *, MAX(b.bidTimeStamp), MAX(b.bidPrice)
             FROM Auction a, Bid b, Category c
@@ -45,6 +45,8 @@
     
     $query = "SELECT * FROM Bid WHERE itemID=$item_id ORDER BY bidID DESC";
     $mybids = mysqli_query($connection, $query);
+
+
 
     if (mysqli_num_rows($mybids) > 0){
       $num_bids = mysqli_num_rows($mybids);
