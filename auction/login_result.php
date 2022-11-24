@@ -36,12 +36,25 @@ if (isset($_POST['loginForm'])){
                         $_SESSION['account_type'] = 'seller';
                     }
 
+                    $account_type = $row["account_type"];
+                    
+                    if ($account_type == 0){
+                        $_SESSION['account_type'] = 'buyer';
+                    }else{
+                        $_SESSION['account_type'] = 'seller';
+                    }
+
                     // start session
                     $log_success = true;
                     $_SESSION['logged_in'] = true;
                     $_SESSION['email'] = $email;
                     $_SESSION['userID'] = $row['userID'];
 
+<<<<<<< HEAD
+=======
+                    //Redirect to index after 5 seconds
+                    header("refresh:5;url=index.php");
+>>>>>>> 38f81e9b615fd4464caa627c6ff221fe8a45f3de
 
                 }
               } else {
