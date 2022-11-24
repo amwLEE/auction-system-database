@@ -70,7 +70,7 @@
   //       to determine if the user is already watching this item.
   //       For now, this is hardcoded.
 
-  if ($_SESSION["logged_in"]==1){
+  if ((isset($_SESSION['logged_in'])) && ($_SESSION["logged_in"]==1 )){
     $queryWatch = "SELECT * FROM Watch WHERE userID = $userID and itemID = $item_id";
     $resultWatch = mysqli_query($connection, $queryWatch);
     $has_session = true;

@@ -1,6 +1,8 @@
 <?php include_once("header.php")?>
 <?php require("database.php");?>
+<?php require("utilities.php")?>
 <?php include("watchlist_funcs.php")?>
+
 
 <div class="container">
 
@@ -24,6 +26,10 @@
             $watchresult = mysqli_query($connection, $query);
     
             $auctionWatch = mysqli_fetch_assoc($watchresult);
+
+
+            $bidQuery = "SELECT * FROM Bid WHERE itemID=$itemID ORDER BY bidID DESC";
+            $bidQueryresult = mysqli_query($connection, $bidQuery);
             
             $title = $auctionWatch['itemName'];
             $description = $auctionWatch['itemDescription'];
@@ -31,15 +37,23 @@
             $end_time = new DateTime($auctionWatch['endDateTime']);
             $starting_price = $auctionWatch['startingPrice'];
             $reserve_price = $auctionWatch['reservePrice'];
-            $time_remaining = 3;
-    
-            echo('
-            <li class="list-group-item d-flex justify-content-between">
-              <div class="p-2 mr-5"><h5><a href="listing.php?item_id=' . $itemID . '">' . $title . '</a></h5>' . $description . '<br/><mark style="background: lightblue;">' . $category_name . '</mark>' . ' ' . '<mark style="background: pink;" > £' . $starting_price . '</mark></div>
-            </li>
-          ');
+
+            $num_bids = mysqli_num_rows($bidQueryresult);
+            if (mysqli_num_rows($bidQueryresult) > 0){
+              $current_price = mysqli_fetch_row($bidQueryresult)[4];
+            }else{
+              $current_price = $starting_price;
+            }
+            
+
+            print_listing_li($itemID, $title, $description, intval($current_price), $num_bids, $end_time, $category_name, "In progress");
 
         }
+
+
+        // if a user made bid then display your bid vs current bid.
+        // if a user gets outbid - notify them
+        // if auction has ended and you 
         mysqli_close($connection);
     }
       
