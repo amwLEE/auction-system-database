@@ -8,7 +8,6 @@ CREATE DATABASE AuctionDB
 
 USE AuctionDB;
 
-
 -- Create admin account for database
 DROP USER IF EXISTS 'adbadmin'@'localhost';
 FLUSH PRIVILEGES;
@@ -51,7 +50,7 @@ CREATE TABLE Auction
 (
     itemID INT AUTO_INCREMENT PRIMARY KEY,
     itemName VARCHAR(64) NOT NULL,
-    itemDescription VARCHAR(255) NOT NULL,
+    itemDescription VARCHAR(4000) NOT NULL,
     sellerID INT,
     categoryID INT,
     startDateTime TIMESTAMP NOT NULL,

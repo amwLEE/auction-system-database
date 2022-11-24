@@ -11,10 +11,10 @@
     if (isset($_POST['submit'])) {
         $title = mysqli_real_escape_string($connection, $_POST['auctionTitle']);
         $description = mysqli_real_escape_string($connection, $_POST['auctionDetails']);
-        $categoryID = $_POST['auctionCategory'];
-        $startingPrice = $_POST['auctionStartPrice'];
-        $reservePrice = $_POST['auctionReservePrice'];
-        $endDateTime = date('Y-m-d H:i:s', strtotime($_POST['auctionEndDate']));
+        $categoryID = mysqli_real_escape_string($connection, $_POST['auctionCategory']);
+        $startingPrice = mysqli_real_escape_string($connection, $_POST['auctionStartPrice']);
+        $reservePrice = mysqli_real_escape_string($connection, $_POST['auctionReservePrice']);
+        $endDateTime = mysqli_real_escape_string($connection, date('Y-m-d H:i:s', strtotime($_POST['auctionEndDate'])));
 
         $startDateTime = date('Y-m-d H:i:s');
 
