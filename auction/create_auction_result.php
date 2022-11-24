@@ -2,10 +2,7 @@
     include_once('header.php');
 
     include 'database.php';
-
 ?>
-
-
 
 <div class="container my-5">
 
@@ -71,9 +68,11 @@
             VALUES ('$sellerID', '$title','$description', '$categoryID', '$startDateTime', '$endDateTime', '$startingPrice', '$reservePrice')";
             
             if (mysqli_query($connection, $sql)) {
-                echo ('<div class="text-center">Auction successfully created! <a href="FIXME">View your new listing.</a></div>');
+                $itemID = mysqli_insert_id($connection);
+                $link_address = 'http://auctionsite/listing.php?item_id=' . $itemID;
+                echo("<div class='text-center'>Auction successfully created! <a href=$link_address> View your new listing. </a></div>");
             } else {
-                echo "Error: " . $sql . "<br>" . mysqli_error($connection);
+                echo 'Error: ' . $sql . '<br>' . mysqli_error($connection);
             }
 
         // Guide users if there are errors with their input data.
