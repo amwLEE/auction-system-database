@@ -6,6 +6,13 @@
   if (!isset($_SESSION['account_type']) || $_SESSION['account_type'] != 'seller') {
     header('Location: browse.php');
   }
+
+  // Connect to database
+  include 'database.php';
+
+  // Get all the categories from category table
+  $sql = "SELECT * FROM Category";
+  $categories = mysqli_query($connection, $sql);
 ?>
 
 <div class="container">
@@ -39,13 +46,19 @@
         <div class="form-group row">
           <label for="auctionCategory" class="col-sm-2 col-form-label text-right">Category</label>
           <div class="col-sm-10">
-            <select class="form-control" id="auctionCategory" name="auctionCategory"
+            <!-- Drop down list where the options are fetched from Category table
+              Source: https://www.geeksforgeeks.org/create-a-drop-down-list-that-options-fetched-from-a-mysql-database-in-php/ -->
+            <select class="form-control" id="auctionCategory" name="auctionCategory">
               <option selected>Choose...</option>
-              <option value="1" name=1>Art</option>
-              <option value="2" name=2>Electronics</option>
-              <option value="3" name=3>Fashion</option>
-              <option value="4" name=4>Furniture</option>
-              <option value="5" name=5>Household Appliances</option>
+              <?php
+                  while ($category = mysqli_fetch_array($categories, MYSQLI_ASSOC)):;
+              ?>
+              <option value = "<?php echo $category["categoryID"];?>">
+              <?php echo $category["categoryName"]; ?>
+              </option>
+            <?php
+              endwhile;
+            ?>
             </select>
             <small id="categoryHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> Select a category for this item.</small>
           </div>

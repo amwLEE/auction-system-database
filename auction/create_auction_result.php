@@ -1,10 +1,15 @@
-<?php include_once("header.php") ?>
+<?php 
+    include_once('header.php');
+
+    include 'database.php';
+
+?>
+
+
 
 <div class="container my-5">
 
     <?php
-
-    include 'database.php';
 
     $errors = array();
 
@@ -18,9 +23,15 @@
 
         $startDateTime = date('Y-m-d H:i:s');
 
+        $sellerID = $_SESSION['userID'];
+
         // check if data was properly submitted
         if (!isset($title, $description, $categoryID, $startingPrice, $reservePrice, $endDateTime)) {
             $errors[] = 'Could not get submitted data inputs properly, please try again.';
+        }
+
+        if (empty($sellerID)) {
+            $errors[] = 'Issue with getting seller ID.';
         }
         
         // Ensure that none of the required inputs are empty
@@ -32,14 +43,14 @@
         if (!is_string($title)) {
             $errors[] = 'Please ensure that your auction title is a string.';
         } else if (strlen($title) > 64) {
-            $errors[] = 'Please make sure your auction title is less than 64 characters.';
+            $errors[] = 'Please shorten your auction title.';
         }
 
-        // Ensure that the auction description is a string, and has max 255 characters
+        // Ensure that the auction description is a string, and has max 4000 characters
         if (!is_string($description)) {
             $errors[] = 'Please ensure that your auction description is a string.';
-        } else if (strlen($description) > 64) {
-            $errors[] = 'Please make sure your auction description is less than 255 characters.';
+        } else if (strlen($description) > 255) {
+            $errors[] = 'Please shorten your auction description.';
         }
         
         // If seller does not specify reserve price, automatically set it to starting price to prevent NULL values
@@ -56,8 +67,8 @@
 
         // Insert data into database if there are no errors with inputs.
         if (empty($errors)) {
-            $sql = "INSERT INTO Auction (itemName, itemDescription, categoryID, startDateTime, endDateTime, startingPrice, reservePrice)
-            VALUES ('$title','$description', '$categoryID', '$startDateTime', '$endDateTime', '$startingPrice', '$reservePrice')";
+            $sql = "INSERT INTO Auction (sellerID, itemName, itemDescription, categoryID, startDateTime, endDateTime, startingPrice, reservePrice)
+            VALUES ('$sellerID', '$title','$description', '$categoryID', '$startDateTime', '$endDateTime', '$startingPrice', '$reservePrice')";
             
             if (mysqli_query($connection, $sql)) {
                 echo ('<div class="text-center">Auction successfully created! <a href="FIXME">View your new listing.</a></div>');

@@ -4,8 +4,6 @@ CREATE DATABASE AuctionDB
     DEFAULT CHARACTER SET utf8
     DEFAULT COLLATE utf8_general_ci;
 
-
-
 USE AuctionDB;
 
 -- Create admin account for database
@@ -19,12 +17,13 @@ GRANT ALL PRIVILEGES
     ON AuctionDB.*
     TO 'adbadmin'@'localhost';
 
--- Create table for users
 
+-- Create table for users
 DROP TABLE IF EXISTS Users;
+
 CREATE TABLE Users
 (
-    userID INT AUTO_INCREMENT PRIMARY KEY,
+    userID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     firstName VARCHAR(64) NOT NULL,
     lastName VARCHAR(64) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -34,42 +33,47 @@ CREATE TABLE Users
 )
 ENGINE = InnoDB;
 
--- Create table for category
 
+-- Create table for category
 DROP TABLE IF EXISTS Category;
+
 CREATE TABLE Category 
 (
-    categoryID INT AUTO_INCREMENT PRIMARY KEY,
+    categoryID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     categoryName VARCHAR(64) NOT NULL
 )
 ENGINE = InnoDB;
 
+
 -- Create table for auction
 DROP TABLE IF EXISTS Auction;
+
 CREATE TABLE Auction 
 (
-    itemID INT AUTO_INCREMENT PRIMARY KEY,
+    itemID INT NOT NULL  AUTO_INCREMENT PRIMARY KEY,
     itemName VARCHAR(64) NOT NULL,
-    itemDescription VARCHAR(4000) NOT NULL,
-    sellerID INT,
-    categoryID INT,
+    itemDescription VARCHAR(255) NOT NULL,
+    sellerID INT NOT NULL ,
+    categoryID INT NOT NULL,
     startDateTime TIMESTAMP NOT NULL,
     endDateTime TIMESTAMP NOT NULL,
     startingPrice DECIMAL(12,2) NOT NULL,
     reservePrice DECIMAL(12,2) NOT NULL,
-    FOREIGN KEY (sellerID) REFERENCES Users(userID),
-    FOREIGN KEY (categoryID) REFERENCES category(categoryID)
+    FOREIGN KEY (sellerID) REFERENCES Users(userID) ON DELETE CASCADE,
+    FOREIGN KEY (categoryID) REFERENCES Category(categoryID) ON DELETE CASCADE
 )
 ENGINE = InnoDB;
 
+
 -- Create table for bid
 DROP TABLE IF EXISTS Bid;
+
 CREATE TABLE Bid 
 (
-    bidID INT AUTO_INCREMENT PRIMARY KEY,
-    itemID INT,
-    buyerID INT,
-    bidTimeStamp TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    bidID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    itemID INT NOT NULL ,
+    buyerID INT NOT NULL ,
+    bidTimeStamp TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     bidPrice DECIMAL(12,2) NOT NULL,
     FOREIGN KEY (itemID) REFERENCES Auction(itemID),
     FOREIGN KEY (buyerID) REFERENCES Users(userID)
