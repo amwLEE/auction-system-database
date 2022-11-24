@@ -8,6 +8,7 @@ if(!isset($_SESSION))
 unset($_SESSION['logged_in']);
 unset($_SESSION['account_type']);
 unset($_SESSION['email']);
+unset($_SESSION['userID']);
 
 $success = false;
 $log_success= false;

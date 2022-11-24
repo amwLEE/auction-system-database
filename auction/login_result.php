@@ -40,6 +40,7 @@ if (isset($_POST['loginForm'])){
                     $log_success = true;
                     $_SESSION['logged_in'] = true;
                     $_SESSION['email'] = $email;
+                    $_SESSION['userID'] = $row['userID'];
 
 
                 }
@@ -52,14 +53,5 @@ if (isset($_POST['loginForm'])){
 }
 
 $connection->close();
-
-// session_start();
-// $_SESSION['logged_in'] = true;
-// $_SESSION['username'] = "test";
-// $_SESSION['account_type'] = "buyer";
-
-// echo('<div class="text-center">You are now logged in! You will be redirected shortly.</div>');
-
-
 
 ?>
