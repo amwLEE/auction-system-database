@@ -139,14 +139,15 @@
   }
   ?>
 
-    <div class="itemDescription">
-      <?php echo($description); ?>
-      <?php echo "<div><mark style='background: lightblue'>$category_name</mark> $status</div>"; ?>
-    </div>
-    
-    <div>
-      <img src="https://image.shutterstock.com/image-vector/coming-soon-grunge-rubber-stamp-260nw-196970096.jpg" alt="Coming soon">
-    </div>
+            <div class="itemDescription">
+                <?php echo($description); ?>
+                <?php echo "<div><mark style='background: lightblue'>$category_name</mark> $status</div>"; ?>
+            </div>
+
+            <div>
+                <img src="https://image.shutterstock.com/image-vector/coming-soon-grunge-rubber-stamp-260nw-196970096.jpg"
+                    alt="Coming soon">
+            </div>
 
         </div>
 
@@ -280,7 +281,8 @@ mysqli_close($connection);
     function addToWatchlist(button) {
         console.log("These print statements are helpful for debugging btw");
         // This performs an asynchronous call to a PHP function using POST method.
-        // Sends item ID as an argument to that function.
+        // Sends item ID and userID as an argument to that function.
+
         $.ajax('watchlist_funcs.php', {
             type: "POST",
             data: {
@@ -290,13 +292,11 @@ mysqli_close($connection);
             },
 
             success: function(obj, textstatus) {
-                
-                // Callback function for when call is successful and returns obj
-                var objT = obj.trim();
-                //hardcoded rn
-                    objT = "success";
 
-                if (objT == "success") {
+                console.log(obj);
+
+                // Callback function for when call is successful and returns object
+                if (obj == "success") {
                     $("#watch_nowatch").hide();
                     $("#watch_watching").show();
                 } else {
@@ -326,10 +326,8 @@ mysqli_close($connection);
 
             success: function(obj, textstatus) {
                 // Callback function for when call is successful and returns obj
-                console.log("Success");
-                var objT = obj.trim();
-                objT = "success";
-                if (objT == "success") {
+
+                if (obj == "success") {
                     $("#watch_watching").hide();
                     $("#watch_nowatch").show();
                 } else {
