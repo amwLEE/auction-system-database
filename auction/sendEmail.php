@@ -3,15 +3,7 @@
 
 <?php
 
-    #name
-    #email
-    #recipient
-    #mail body
-    #subject
-    #header
-
-
-    #mail
+   #mail
     // $query = "SELECT * FROM Bid b, Users u WHERE buyerID = $userID AND b.buyerID = u.userID";
 
     // $result = mysqli_query($connection, $query);
@@ -90,8 +82,10 @@
             echo "Message could not be sent...";
          }
          return $retval;
-         
+
      }
+
+
 
 
 
