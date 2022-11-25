@@ -1,14 +1,9 @@
 <?php
-  // FIXME: At the moment, I've allowed these values to be set manually.
-  // But eventually, with a database, these should be set automatically
-  // ONLY after the user's login credentials have been verified via a 
-  // database query.
-  session_start();
-  
-  // $_SESSION['logged_in'] = false;
-  // $_SESSION['account_type'] = 'seller';
+  if(!isset($_SESSION)) 
+  { 
+      session_start(); 
+  } 
 ?>
-
 
 <!doctype html>
 <html lang="en">

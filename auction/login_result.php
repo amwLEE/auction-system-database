@@ -8,6 +8,10 @@
 
 include 'database.php';
 
+if(!isset($_SESSION)) 
+{ 
+    session_start(); 
+} 
 
 if (isset($_POST['loginForm'])){
 
@@ -38,8 +42,6 @@ if (isset($_POST['loginForm'])){
                     $_SESSION['email'] = $email;
                     $_SESSION['userID'] = $row['userID'];
 
-                    
-                    
 
                 }
               } else {
@@ -51,14 +53,5 @@ if (isset($_POST['loginForm'])){
 }
 
 $connection->close();
-
-// session_start();
-// $_SESSION['logged_in'] = true;
-// $_SESSION['username'] = "test";
-// $_SESSION['account_type'] = "buyer";
-
-// echo('<div class="text-center">You are now logged in! You will be redirected shortly.</div>');
-
-
 
 ?>

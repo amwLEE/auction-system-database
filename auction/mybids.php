@@ -64,7 +64,7 @@
         $status = 'Loss';
       }
     } else {
-      $status = 'Pending';
+      $status = 'In progress';
     }
 
     print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time, $category, $status);
