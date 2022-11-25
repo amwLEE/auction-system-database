@@ -46,7 +46,7 @@
             }
             
 
-            print_listing_li($itemID, $title, $description, intval($current_price), $num_bids, $end_time, $category_name, "In progress");
+            print_listing_li($itemID, $title, $description, $current_price, $num_bids, $end_time, $category_name, "In progress");
 
         }
 
