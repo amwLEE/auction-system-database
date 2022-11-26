@@ -73,7 +73,7 @@ function print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time,
     '</div>
 
     <div class="text-center text-nowrap">
-      <span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>' .
+      <span style="font-size: 1.5em">Current Bid: £' . number_format($price, 2) . '</span><br/>' .
       $num_bids . $bid . '<br/>' .
       $time_remaining .
     '</div>

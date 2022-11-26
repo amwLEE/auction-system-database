@@ -38,22 +38,75 @@
             $starting_price = $auctionWatch['startingPrice'];
             $reserve_price = $auctionWatch['reservePrice'];
 
+
             $num_bids = mysqli_num_rows($bidQueryresult);
+
+            // Setting price of item
             if (mysqli_num_rows($bidQueryresult) > 0){
               $current_price = mysqli_fetch_row($bidQueryresult)[4];
             }else{
               $current_price = $starting_price;
             }
-            
 
-            print_listing_li($itemID, $title, $description, $current_price, $num_bids, $end_time, $category_name, "In progress");
+            // Check whether auction has ended, and display auction status accordingly
+            $now = new DateTime();
+            
+            if ($now > $end_time) {
+                if ($num_bids == 0 or ($current_price <$reserve_price)) {
+                  $status = "Not sold";
+                //   '<mark style="background: red">Not sold</mark>';
+                } else {
+                  $status = "Sold";
+                //   '<mark style="background: green">Sold</mark>';
+                }
+              } else {
+                $status = "In progress";
+                // '<mark style="background: orange">In progress</mark>';
+              }
+
+
+
+            // Check whether user has made a bid on a particular item
+            $userBid = "SELECT * FROM Bid WHERE buyerID = '{$userID}' and itemID = '{$itemID}' ORDER BY bidID DESC ";
+            $userBidResult = mysqli_query($connection, $userBid);
+            
+            // Display users bid compared to current price, if user has made a bid
+            if (mysqli_num_rows($userBidResult) > 0){
+                $userBidDetails = mysqli_fetch_assoc($userBidResult);
+                $userBidPrice = $userBidDetails['bidPrice'];
+
+                $time_to_end = date_diff($now, $end_time);
+                $time_remaining = display_time_remaining($time_to_end) . ' remaining';
+
+                echo(
+                    '<li class="list-group-item d-flex justify-content-between">
+                    <div class="p-2 mr-5">
+                      <h5><a href="listing.php?item_id=' . $itemID . '">' . $title . '</a></h5>' .
+                      $description . '<br/>' .
+                      '<mark style="background: lightblue;">' . $category_name . '</mark>&nbsp;' . $status . '</mark>' .
+                    '</div>
+
+                    <div>
+                        
+                        <span style="font-size: 1.5em">Your Bid: £' . number_format($userBidPrice,2) . '</span><br/>' .
+                    '</div>
+                
+                    <div class="text-center text-nowrap">
+                      <span style="font-size: 1.5em">Current Bid: £' . number_format($current_price, 2) . '</span><br/>' .
+                      $num_bids . ' bids'. '<br/>' .
+                      $time_remaining .
+                    '</div>
+                  </li>'
+                );
+
+            }else{
+                print_listing_li($itemID, $title, $description, $current_price, $num_bids, $end_time, $category_name, $status);
+
+            }
+
 
         }
 
-
-        // if a user made bid then display your bid vs current bid.
-        // if a user gets outbid - notify them
-        // if auction has ended and you 
         mysqli_close($connection);
     }
       

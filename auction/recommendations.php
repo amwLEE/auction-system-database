@@ -73,7 +73,7 @@
         $category = $listing['categoryName'];
         $end_time = new DateTime($listing['endDateTime']);
         
-        $mybids = mysqli_query($connection, "SELECT * FROM Bid WHERE itemID=$item_id");
+        $mybids = mysqli_query($connection, "SELECT * FROM Bid WHERE itemID=$item_id ORDER BY bidID DESC");
         if (mysqli_num_rows($mybids) > 0){
           $num_bids = mysqli_num_rows($mybids);
           $price = mysqli_fetch_row($mybids)[4];
@@ -123,7 +123,7 @@
     $category = $listing['categoryName'];
     $end_time = new DateTime($listing['endDateTime']);
     
-    $mybids = mysqli_query($connection, "SELECT * FROM Bid WHERE itemID=$item_id");
+    $mybids = mysqli_query($connection, "SELECT * FROM Bid WHERE itemID=$item_id ORDER BY bidID DESC");
     if (mysqli_num_rows($mybids) > 0){
       $num_bids = mysqli_num_rows($mybids);
       $price = mysqli_fetch_row($mybids)[4];

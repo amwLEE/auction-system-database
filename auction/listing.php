@@ -104,7 +104,7 @@
             <?php
   /* The following watchlist functionality uses JavaScript, but could
      just as easily use PHP as in other places in the code */
-  if (($now < $end_time) && ($account_type == 'buyer')):
+  if (($account_type == 'buyer')):
 ?>
             <div id="watch_nowatch" <?php if ($has_session && $watching) echo('style="display: none"');?>>
                 <button type="button" class="btn btn-outline-secondary btn-sm" onclick="addToWatchlist()">+ Add to
