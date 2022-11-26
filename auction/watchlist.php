@@ -75,8 +75,15 @@
                 $userBidDetails = mysqli_fetch_assoc($userBidResult);
                 $userBidPrice = $userBidDetails['bidPrice'];
 
-                $time_to_end = date_diff($now, $end_time);
-                $time_remaining = display_time_remaining($time_to_end) . ' remaining';
+
+                if ($now > $end_time) {
+                    $time_remaining = 'This auction has ended';
+                  }
+                  else {
+                    // Get interval:
+                    $time_to_end = date_diff($now, $end_time);
+                    $time_remaining = display_time_remaining($time_to_end) . ' remaining';
+                  }
 
                 echo(
                     '<li class="list-group-item d-flex justify-content-between">
