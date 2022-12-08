@@ -27,7 +27,7 @@
   // the shared "utilities.php" where they can be shared by multiple files.
 
   // Perform a query to pull up auctions they might be interested in.
-  $query = "SELECT itemID, COUNT(itemID) FROM Bid WHERE buyerID=$buyerID GROUP BY itemID ORDER BY bidTimeStamp DESC";
+  $query = "SELECT itemID, COUNT(itemID) FROM Bid WHERE buyerID=$buyerID GROUP BY itemID,bidTimeStamp ORDER BY bidTimeStamp DESC";
   $result = mysqli_query($connection, $query);
   $arr = array();
   if (mysqli_num_rows($result) != 0){
@@ -41,7 +41,7 @@
               FROM Bid
               WHERE (buyerID<>$buyerID) AND (itemID IN ($myitems))
               GROUP BY buyerID
-              ORDER BY COUNT(buyerID) DESC";
+              ORDER BY 2 DESC";
     $result = mysqli_query($connection, $query);
     $myneighbours = array();
     while ($y = mysqli_fetch_assoc($result)){
@@ -49,11 +49,11 @@
     }
     $myneighbours = implode(',', $myneighbours);
 
-    $query = "SELECT itemID, COUNT(itemID)
+    $query = "SELECT b.itemID, COUNT(b.itemID)
               FROM Bid b
-              WHERE (buyerID IN ($myneighbours)) AND (itemID NOT IN ($myitems)) AND (SELECT endDateTime FROM Auction a WHERE a.itemID=b.itemID)>NOW()
-              GROUP BY itemID
-              ORDER BY COUNT(itemID) DESC
+              INNER JOIN Auction a ON a.itemID = b.itemID AND(b.buyerID IN ($myneighbours)) AND (b.itemID NOT IN ($myitems)) AND a.endDateTime > NOW()
+              GROUP BY b.itemID
+              ORDER BY 2 DESC
               LIMIT 0,5";
     $result = mysqli_query($connection, $query);
     while ($z = mysqli_fetch_assoc($result)){
@@ -103,8 +103,9 @@
             FROM Auction a, Bid b
             WHERE a.itemID=b.itemID AND a.endDateTime>NOW()
             GROUP BY b.itemID
-            ORDER BY COUNT(b.itemID) DESC, MAX(b.bidTimeStamp) DESC, a.endDateTime ASC
+            ORDER BY 2 DESC, 3 DESC, a.endDateTime ASC
             LIMIT 0,5";
+            
   $result = mysqli_query($connection, $query);
   $arr = array();
   while ($listing = mysqli_fetch_assoc($result)){

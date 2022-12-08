@@ -27,11 +27,14 @@
   // the shared "utilities.php" where they can be shared by multiple files.
 
   // Perform a query to pull up the auctions they've bidded on.
-  $query = "SELECT *, MAX(b.bidTimeStamp), MAX(b.bidPrice)
-            FROM Auction a, Bid b, Category c
-            WHERE b.buyerID=$buyerID AND a.itemID=b.itemID AND c.categoryID=a.categoryID
-            GROUP BY b.itemID
-            ORDER BY MAX(b.bidTimeStamp) DESC";
+  $query = "SELECT a.itemID, a.itemName, a.itemDescription,a.startDateTime, a.endDateTime,a.categoryID, a.startingPrice, a.reservePrice,a.sellerID,b.buyerID,c.categoryName,c.categoryID, MAX(b.bidTimeStamp), MAX(b.bidPrice)
+  FROM Auction a 
+  INNER JOIN Bid b 
+  ON a.itemID = b.itemID and b.buyerID = $buyerID 
+  INNER JOIN Category c
+  ON c.categoryID = a.categoryID
+  GROUP BY a.itemID, a.itemName, a.itemDescription,a.startDateTime, a.endDateTime,a.categoryID, a.startingPrice, a.reservePrice,a.sellerID,b.buyerID,c.categoryName,c.categoryID
+  ORDER BY MAX(b.bidTimeStamp) DESC";
   $mylistings = mysqli_query($connection, $query);
 
   // Loop through results and print them out as list items.
