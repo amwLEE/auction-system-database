@@ -1,7 +1,7 @@
 <?php 
     include_once('header.php');
 
-    include 'database.php';
+    require("database.php");;
 ?>
 
 <div class="container my-5">
@@ -32,7 +32,7 @@
         }
         
         // Ensure that none of the required inputs are empty
-        if (empty($title) || empty($description) || empty($categoryID) || empty($startingPrice) || empty($endDateTime)) {
+        if (empty($title) || empty($categoryID) || empty($startingPrice) || empty($endDateTime)) {
             $errors[] = 'Please fill in all required fields!';
         }
 
@@ -43,7 +43,9 @@
             $errors[] = 'Please shorten your auction title.';
         }
 
-        // Ensure that the auction description is a string, and has max 4000 characters
+        // 
+
+        // Ensure that the auction description is a string, and has max 255 bytes worth
         if (!is_string($description)) {
             $errors[] = 'Please ensure that your auction description is a string.';
         } else if (strlen($description) > 255) {
@@ -69,7 +71,7 @@
             
             if (mysqli_query($connection, $sql)) {
                 $itemID = mysqli_insert_id($connection);
-                $link_address = 'http://auctionsite/listing.php?item_id=' . $itemID;
+                $link_address = 'http://auctionsite/listing.php?item_id=' . $itemID; // NEED TO FIX
                 echo("<div class='text-center'>Auction successfully created! <a href=$link_address> View your new listing. </a></div>");
             } else {
                 echo 'Error: ' . $sql . '<br>' . mysqli_error($connection);

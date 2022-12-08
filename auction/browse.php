@@ -1,4 +1,14 @@
-<?php include_once("header.php")?>
+<?php 
+  include_once("header.php");
+
+  // Connect to database
+  include 'database.php';
+  
+  // Get all the categories from category table
+  $sql = "SELECT * FROM Category";
+  $categories = mysqli_query($connection, $sql);
+?>
+
 <?php require("utilities.php")?>
 
 <div class="container">
@@ -28,10 +38,18 @@
       <div class="form-group">
         <label for="cat" class="sr-only">Search within:</label>
         <select class="form-control" id="cat">
+          <!-- Drop down list where the options are fetched from Category table
+              Source: https://www.geeksforgeeks.org/create-a-drop-down-list-that-options-fetched-from-a-mysql-database-in-php/ -->
           <option selected value="all">All categories</option>
-          <option value="fill">Fill me in</option>
-          <option value="with">with options</option>
-          <option value="populated">populated from a database?</option>
+            <?php
+                while ($categoryName = mysqli_fetch_array($categories, MYSQLI_ASSOC)):;
+            ?>
+            <option value = "<?php echo $categoryName["categoryID"];?>">
+            <?php echo $categoryName["categoryName"]; ?>
+          </option>
+          <?php
+            endwhile;
+          ?>
         </select>
       </div>
     </div>
@@ -55,24 +73,35 @@
 
 </div>
 
+
 <?php
+  // Search bar. source: https://owlcation.com/stem/Simple-search-PHP-MySQL
   // Retrieve these from the URL
   if (!isset($_GET['keyword'])) {
-    // TODO: Define behavior if a keyword has not been specified.
+    // TODO: Define behavior if a search keyword has not been specified.
+    $keyword = "";
   }
   else {
-    $keyword = $_GET['keyword'];
+    $keyword = mysqli_real_escape_string($connection, htmlspecialchars($_GET['keyword']));
+    // partial matching, i.e. any item name or description that contains the search keyword will be returned
+    $sql = "SELECT * FROM Auction WHERE ('itemName' LIKE '%".$keyword."%') OR ('itemDescription'LIKE '%".$keyword."%')";
+    $results = mysqli_query($connection, $sql) or die (mysqli_error($connection));
   }
 
   if (!isset($_GET['cat'])) {
     // TODO: Define behavior if a category has not been specified.
+    $sql = "SELECT * FROM Auction"; 
+    $results = mysqli_query($connection, $sql) or die (mysqli_error($connection));
   }
   else {
     $category = $_GET['cat'];
+    $sql = "SELECT * FROM Auction INNER JOIN Category on Auction.categoryID=Category.categoryID WHERE 'categoryName'=".$category."";
+    $results = mysqli_query($connection, $sql) or die (mysqli_error($connection));
   }
   
   if (!isset($_GET['order_by'])) {
     // TODO: Define behavior if an order_by value has not been specified.
+    $ordering = 'date'; // Default ordering is set to soonest expiry
   }
   else {
     $ordering = $_GET['order_by'];
@@ -88,10 +117,19 @@
   /* TODO: Use above values to construct a query. Use this query to 
      retrieve data from the database. (If there is no form data entered,
      decide on appropriate default value/default query to make. */
+    
+
+     $results = mysqli_query($connection, $sql) or die (mysqli_error($connection));
+
+
+
+  if (mysqli_num_rows($results) > 0){
+    ;
+  }
   
   /* For the purposes of pagination, it would also be helpful to know the
      total number of results that satisfy the above query */
-  $num_results = 96; // TODO: Calculate me for real
+  $num_results = mysqli_num_rows($results); // TODO: Calculate me for real
   $results_per_page = 10;
   $max_page = ceil($num_results / $results_per_page);
 ?>

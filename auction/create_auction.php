@@ -51,10 +51,10 @@
             <select class="form-control" id="auctionCategory" name="auctionCategory">
               <option selected>Choose...</option>
               <?php
-                  while ($category = mysqli_fetch_array($categories, MYSQLI_ASSOC)):;
+                  while ($row = mysqli_fetch_assoc($categories)):;
               ?>
-              <option value = "<?php echo $category["categoryID"];?>">
-              <?php echo $category["categoryName"]; ?>
+              <option value = "<?php echo $row["categoryID"];?>">
+              <?php echo $row["categoryName"]; ?>
               </option>
             <?php
               endwhile;
