@@ -13,9 +13,12 @@
   // Check user's credentials (cookie/session).
   if (isset($_SESSION['logged_in'])==1) {
     $account_type = $_SESSION['account_type'];
+    $userID = $_SESSION['userID'];
   } else {
     $account_type = 'buyer';
   }
+
+  
 
   // Get info from the URL:
   $item_id = $_GET['item_id'] or die("<h1>404 Not Found</h1>The page that you have requested could not be found.");
@@ -66,38 +69,62 @@
   // TODO: If the user has a session, use it to make a query to the database
   //       to determine if the user is already watching this item.
   //       For now, this is hardcoded.
-  $has_session = true;
-  $watching = false;
+
+  if ((isset($_SESSION['logged_in'])) && ($_SESSION["logged_in"]==1 )){
+    $queryWatch = "SELECT * FROM Watch WHERE userID = $userID and itemID = $item_id";
+    $resultWatch = mysqli_query($connection, $queryWatch);
+    $has_session = true;
+
+    if (mysqli_num_rows($resultWatch) == 0 ){
+      $watching = false;
+      
+    }else{
+      $watching = true;
+    }
+
+
+  }else{
+    $has_session = false;
+  }
+
+
 ?>
 
 
 <div class="container">
 
-<div class="row"> <!-- Row #1 with auction title + watch button -->
-  <div class="col-sm-8"> <!-- Left col -->
-    <h2 class="my-3"><?php echo($title); ?></h2>
-  </div>
-  <div class="col-sm-4 align-self-center"> <!-- Right col -->
-<?php
+    <div class="row">
+        <!-- Row #1 with auction title + watch button -->
+        <div class="col-sm-8">
+            <!-- Left col -->
+            <h2 class="my-3"><?php echo($title); ?></h2>
+        </div>
+        <div class="col-sm-4 align-self-center">
+            <!-- Right col -->
+            <?php
   /* The following watchlist functionality uses JavaScript, but could
      just as easily use PHP as in other places in the code */
-  if (($now < $end_time) && ($account_type == 'buyer')):
+  if (($account_type == 'buyer')):
 ?>
-    <div id="watch_nowatch" <?php if ($has_session && $watching) echo('style="display: none"');?> >
-      <button type="button" class="btn btn-outline-secondary btn-sm" onclick="addToWatchlist()">+ Add to watchlist</button>
+            <div id="watch_nowatch" <?php if ($has_session && $watching) echo('style="display: none"');?>>
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="addToWatchlist()">+ Add to
+                    watchlist</button>
+            </div>
+            <div id="watch_watching" <?php if (!$has_session || !$watching) echo('style="display: none"');?>>
+                <button type="button" class="btn btn-success btn-sm" disabled>Watching</button>
+                <button type="button" class="btn btn-danger btn-sm" onclick="removeFromWatchlist()">Remove
+                    watch</button>
+            </div>
+            <?php endif /* Print nothing otherwise */ ?>
+        </div>
     </div>
-    <div id="watch_watching" <?php if (!$has_session || !$watching) echo('style="display: none"');?> >
-      <button type="button" class="btn btn-success btn-sm" disabled>Watching</button>
-      <button type="button" class="btn btn-danger btn-sm" onclick="removeFromWatchlist()">Remove watch</button>
-    </div>
-<?php endif /* Print nothing otherwise */ ?>
-  </div>
-</div>
 
-<div class="row"> <!-- Row #2 with auction description + bidding info -->
-  <div class="col-sm-8"> <!-- Left col with item info -->
+    <div class="row">
+        <!-- Row #2 with auction description + bidding info -->
+        <div class="col-sm-8">
+            <!-- Left col with item info -->
 
-  <?php
+            <?php
   mysqli_data_seek($result, 0);
   if ($now > $end_time) {
     if ($num_bids == 0) {
@@ -112,41 +139,44 @@
   }
   ?>
 
-    <div class="itemDescription">
-      <?php echo($description); ?>
-      <?php echo "<div><mark style='background: lightblue'>$category_name</mark> $status</div>"; ?>
-    </div>
-    
-    <div>
-      <img src="https://image.shutterstock.com/image-vector/coming-soon-grunge-rubber-stamp-260nw-196970096.jpg" alt="Coming soon">
-    </div>
+            <div class="itemDescription">
+                <?php echo($description); ?>
+                <?php echo "<div><mark style='background: lightblue'>$category_name</mark> $status</div>"; ?>
+            </div>
 
-  </div>
+            <div>
+                <img src="https://image.shutterstock.com/image-vector/coming-soon-grunge-rubber-stamp-260nw-196970096.jpg"
+                    alt="Coming soon">
+            </div>
 
-  <div class="col-sm-4"> <!-- Right col with bidding info -->
+        </div>
 
-    <p>
-<?php if ($now > $end_time): ?>
-     This auction ended <?php echo(date_format($end_time, 'j M Y H:i')) ?>
-     <!-- TODO: Print the result of the auction here? -->
-<?php else: ?>
-     Auction ends <?php echo(date_format($end_time, 'j M Y H:i') . $time_remaining) ?></p>  
-      
-    <?php if ($account_type == 'buyer'): ?>
-      <p class="lead"><?php echo 'Starting price: £' . number_format($starting_price, 2); ?></p>
-      <p class="lead">
-      <?php
+        <div class="col-sm-4">
+            <!-- Right col with bidding info -->
+
+            <p>
+                <?php if ($now > $end_time): ?>
+                This auction ended <?php echo(date_format($end_time, 'j M Y H:i')) ?>
+                <!-- TODO: Print the result of the auction here? -->
+                <?php else: ?>
+                Auction ends <?php echo(date_format($end_time, 'j M Y H:i') . $time_remaining) ?>
+            </p>
+
+            <?php if ($account_type == 'buyer'): ?>
+            <p class="lead"><?php echo 'Starting price: £' . number_format($starting_price, 2); ?></p>
+            <p class="lead">
+                <?php
       if ($num_bids>0) {
         echo 'Current bid: £';
         echo(number_format($current_price, 2));
       }
       ?>
-      
-  
-    <!-- Bidding form -->
-    <form method="POST">
-      <div class= "message">
-        <?php
+
+
+                <!-- Bidding form -->
+            <form method="POST">
+                <div class="message">
+                    <?php
           include 'place_bid.php';                    
           global $error_msg;
           if (isset($success) && ($success == true)){
@@ -156,65 +186,69 @@
             echo '<p style="color:red;">'.$error_msg.'</p>'; //display error message
           }
         ?>
-      </div>
+                </div>
 
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text">£</span>
-        </div>
-	    <input type="number" class="form-control" id="bid" name="bidPrice" placeholder="<?=number_format($current_price+0.01, 2)?>" min="<?=$current_price+0.01?>" step="0.01" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)">
-    </div>
-      <small id="bidPriceHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
-      <button type="submit" class="btn btn-primary form-control" name="submitBidForm" value="submitBidForm">Place bid</button>
-    </form>
-  <?php endif ?>
-<?php endif ?>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">£</span>
+                    </div>
+                    <input type="number" class="form-control" id="bid" name="bidPrice"
+                        placeholder="<?=number_format($current_price+0.01, 2)?>" min="<?=$current_price+0.01?>"
+                        step="0.01" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)">
+                </div>
+                <small id="bidPriceHelp" class="form-text text-muted"><span class="text-danger">*
+                        Required.</span></small>
+                <button type="submit" class="btn btn-primary form-control" name="submitBidForm"
+                    value="submitBidForm">Place bid</button>
+            </form>
+            <?php endif ?>
+            <?php endif ?>
 
-<?php if ($account_type == 'seller'): ?>
-  <p class="lead"><?php echo 'Starting price: £' . number_format($starting_price, 2); ?></p>
-  <p class="lead"><?php echo 'Reserve price: £' . number_format($reserve_price, 2); ?></p>
-  <p class="lead">
-    <?php
+            <?php if ($account_type == 'seller'): ?>
+            <p class="lead"><?php echo 'Starting price: £' . number_format($starting_price, 2); ?></p>
+            <p class="lead"><?php echo 'Reserve price: £' . number_format($reserve_price, 2); ?></p>
+            <p class="lead">
+                <?php
       if ($num_bids>0) {
         echo 'Current bid: £' . number_format($current_price, 2);
       } else {
         echo 'Current bid: £' . number_format(0, 2);
       }
     ?>
-  </p>
-<?php endif ?>
+            </p>
+            <?php endif ?>
 
-<br>
-<h6>Bid History</h6>
-<p>Total number of bids: <?=$num_bids?></p>
-<?php if ($num_bids > 0): ?>
-  <table border="1">
-    <thead>
-      <tr>
-        <th>Bid ID</th>
-        <th>User ID</th>
-        <th>UTC Timestamp</th>
-        <th>Bid Price</th>
-      </tr>
-    </thead>
+            <br>
+            <h6>Bid History</h6>
+            <p>Total number of bids: <?=$num_bids?></p>
+            <?php if ($num_bids > 0): ?>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Bid ID</th>
+                        <th>User ID</th>
+                        <th>UTC Timestamp</th>
+                        <th>Bid Price</th>
+                    </tr>
+                </thead>
 
-    <tbody>
-      <?php mysqli_data_seek($result, 0); ?>
-      <?php while ($bid = mysqli_fetch_assoc($result)): ?>
-        <tr>
-          <td><?php echo $bid['bidID']; ?></td>
-          <td><?php echo $bid['buyerID']; ?></td>
-          <td><?php echo $bid['bidTimeStamp']; ?></td>
-          <td><?php echo "£" . $bid['bidPrice']; ?></td>
-        </tr>
-      <?php endwhile ?>
-    </tbody>
-  </table>
-  <br>
-<?php endif ?>
+                <tbody>
+                    <?php mysqli_data_seek($result, 0); ?>
+                    <?php while ($bid = mysqli_fetch_assoc($result)): ?>
+                    <tr>
+                        <td><?php echo $bid['bidID']; ?></td>
+                        <td><?php echo $bid['buyerID']; ?></td>
+                        <td><?php echo $bid['bidTimeStamp']; ?></td>
+                        <td><?php echo "£" . $bid['bidPrice']; ?></td>
+                    </tr>
+                    <?php endwhile ?>
+                </tbody>
+            </table>
+            <br>
+            <?php endif ?>
 
-<h6>Remarks</h6>
-<?php
+            <h6>Remarks</h6>
+            <?php
 mysqli_data_seek($result, 0);
 if ($now > $end_time) {
   if ($num_bids == 0) {
@@ -231,82 +265,82 @@ if ($now > $end_time) {
 // Close the connection as soon as it's no longer needed
 mysqli_close($connection);
 ?>
-  
-  </div> <!-- End of right col with bidding info -->
 
-</div> <!-- End of row #2 -->
+        </div> <!-- End of right col with bidding info -->
 
-
-
-<?php include_once("footer.php")?>
+    </div> <!-- End of row #2 -->
 
 
-<script> 
-// JavaScript functions: addToWatchlist and removeFromWatchlist.
 
-function addToWatchlist(button) {
-  console.log("These print statements are helpful for debugging btw");
+    <?php include_once("footer.php")?>
 
-  // This performs an asynchronous call to a PHP function using POST method.
-  // Sends item ID as an argument to that function.
-  $.ajax('watchlist_funcs.php', {
-    type: "POST",
-    data: {functionname: 'add_to_watchlist', arguments: [<?php echo($item_id);?>]},
 
-    success: 
-      function (obj, textstatus) {
-        // Callback function for when call is successful and returns obj
-        console.log("Success");
-        var objT = obj.trim();
- 
-        if (objT == "success") {
-          $("#watch_nowatch").hide();
-          $("#watch_watching").show();
-        }
-        else {
-          var mydiv = document.getElementById("watch_nowatch");
-          mydiv.appendChild(document.createElement("br"));
-          mydiv.appendChild(document.createTextNode("Add to watch failed. Try again later."));
-        }
-      },
+    <script>
+    // JavaScript functions: addToWatchlist and removeFromWatchlist.
 
-    error:
-      function (obj, textstatus) {
-        console.log("Error");
-      }
-  }); // End of AJAX call
+    function addToWatchlist(button) {
+        console.log("These print statements are helpful for debugging btw");
+        // This performs an asynchronous call to a PHP function using POST method.
+        // Sends item ID and userID as an argument to that function.
 
-} // End of addToWatchlist func
+        $.ajax('watchlist_funcs.php', {
+            type: "POST",
+            data: {
+                functionname: 'add_to_watchlist',
+                itemID: <?php echo $item_id ?>,
+                userID: <?php echo $userID?>
+            },
 
-function removeFromWatchlist(button) {
-  // This performs an asynchronous call to a PHP function using POST method.
-  // Sends item ID as an argument to that function.
-  $.ajax('watchlist_funcs.php', {
-    type: "POST",
-    data: {functionname: 'remove_from_watchlist', arguments: [<?php echo($item_id);?>]},
+            success: function(obj, textstatus) {
 
-    success: 
-      function (obj, textstatus) {
-        // Callback function for when call is successful and returns obj
-        console.log("Success");
-        var objT = obj.trim();
- 
-        if (objT == "success") {
-          $("#watch_watching").hide();
-          $("#watch_nowatch").show();
-        }
-        else {
-          var mydiv = document.getElementById("watch_watching");
-          mydiv.appendChild(document.createElement("br"));
-          mydiv.appendChild(document.createTextNode("Watch removal failed. Try again later."));
-        }
-      },
+                console.log(obj);
 
-    error:
-      function (obj, textstatus) {
-        console.log("Error");
-      }
-  }); // End of AJAX call
+                // Callback function for when call is successful and returns object
+                if (obj == "success") {
+                    $("#watch_nowatch").hide();
+                    $("#watch_watching").show();
+                } else {
+                    var mydiv = document.getElementById("watch_nowatch");
+                    mydiv.appendChild(document.createElement("br"));
+                    mydiv.appendChild(document.createTextNode("Add to watch failed. Try again later."));
+                }
+            },
 
-} // End of addToWatchlist func
-</script>
+            error: function(obj, textstatus) {
+                console.log("Error");
+            }
+        }); // End of AJAX call
+
+    } // End of addToWatchlist func
+
+    function removeFromWatchlist(button) {
+        // This performs an asynchronous call to a PHP function using POST method.
+        // Sends item ID as an argument to that function.
+        $.ajax('watchlist_funcs.php', {
+            type: "POST",
+            data: {
+                functionname: 'remove_from_watchlist',
+                itemID: <?php echo $item_id ?>,
+                userID: <?php echo $userID?>
+            },
+
+            success: function(obj, textstatus) {
+                // Callback function for when call is successful and returns obj
+
+                if (obj == "success") {
+                    $("#watch_watching").hide();
+                    $("#watch_nowatch").show();
+                } else {
+                    var mydiv = document.getElementById("watch_watching");
+                    mydiv.appendChild(document.createElement("br"));
+                    mydiv.appendChild(document.createTextNode("Watch removal failed. Try again later."));
+                }
+            },
+
+            error: function(obj, textstatus) {
+                console.log("Error");
+            }
+        }); // End of AJAX call
+
+    } // End of addToWatchlist func
+    </script>

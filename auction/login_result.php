@@ -36,14 +36,6 @@ if (isset($_POST['loginForm'])){
                         $_SESSION['account_type'] = 'seller';
                     }
 
-                    $account_type = $row["account_type"];
-                    
-                    if ($account_type == 0){
-                        $_SESSION['account_type'] = 'buyer';
-                    }else{
-                        $_SESSION['account_type'] = 'seller';
-                    }
-
                     // start session
                     $log_success = true;
                     $_SESSION['logged_in'] = true;
