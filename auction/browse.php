@@ -3,7 +3,7 @@
   require("database.php");
   require("utilities.php");
 
-  $_SESSION['pageType'] = 'browse';
+  $_SESSION['pageType'] = 'listings';
 ?>
 
 
@@ -179,7 +179,7 @@
     
     // bid price low to high, if item has no bids then starting price is used for comparison
     } elseif ($ordering == "priceLow"){    
-      $query = "SELECT *, IFNULL(bidPrice, startingPrice) AS bidPrice 
+      $query = "SELECT a.itemID, a.itemName, a.itemDescription, c.categoryName, a.endDateTime, IFNULL(bidPrice, startingPrice) AS bidPrice 
                 FROM Auction a 
                 LEFT JOIN (SELECT itemID, MAX(bidPrice) AS bidPrice FROM Bid GROUP BY itemID) b 
                   on a.itemID = b.itemID
@@ -191,7 +191,7 @@
 
     // bid price high to low, if item has no bids then starting price is used for comparison
     } elseif ($ordering == "priceHigh"){ 
-      $query = "SELECT *, IFNULL(bidPrice, startingPrice) AS bidPrice 
+      $query = "SELECT a.itemID, a.itemName, a.itemDescription, c.categoryName, a.endDateTime, IFNULL(bidPrice, startingPrice) AS bidPrice 
                 FROM Auction a 
                 LEFT JOIN (SELECT itemID, MAX(bidPrice) AS bidPrice FROM Bid GROUP BY itemID) b 
                   on a.itemID = b.itemID

@@ -1,6 +1,10 @@
-<?php include_once("header.php")?>
-<?php require("utilities.php")?>
-<?php require("database.php")?>
+<?php 
+  include_once("header.php");
+  require("database.php");
+  require("utilities.php");
+
+  $_SESSION['pageType'] = 'listings';
+?>
 
 <?php
   // Check user's credentials from session
