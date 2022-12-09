@@ -28,50 +28,17 @@
 
   // Perform a query to pull up the auctions they've bidded on.
   $query = "SELECT a.itemID, a.itemName, a.itemDescription,a.startDateTime, a.endDateTime,a.categoryID, a.startingPrice, a.reservePrice,a.sellerID,b.buyerID,c.categoryName,c.categoryID, MAX(b.bidTimeStamp), MAX(b.bidPrice)
-  FROM Auction a 
-  INNER JOIN Bid b 
-  ON a.itemID = b.itemID and b.buyerID = $buyerID 
-  INNER JOIN Category c
-  ON c.categoryID = a.categoryID
-  GROUP BY a.itemID, a.itemName, a.itemDescription,a.startDateTime, a.endDateTime,a.categoryID, a.startingPrice, a.reservePrice,a.sellerID,b.buyerID,c.categoryName,c.categoryID
-  ORDER BY MAX(b.bidTimeStamp) DESC";
-  $mylistings = mysqli_query($connection, $query);
+            FROM Auction a 
+            INNER JOIN Bid b 
+            ON a.itemID = b.itemID and b.buyerID = $buyerID 
+            INNER JOIN Category c
+            ON c.categoryID = a.categoryID
+            GROUP BY a.itemID, a.itemName, a.itemDescription,a.startDateTime, a.endDateTime,a.categoryID, a.startingPrice, a.reservePrice,a.sellerID,b.buyerID,c.categoryName,c.categoryID
+            ORDER BY MAX(b.bidTimeStamp) DESC";
+  $result = mysqli_query($connection, $query);
 
   // Loop through results and print them out as list items.
-  while ($listing = mysqli_fetch_assoc($mylistings)){
-    $item_id = intval($listing['itemID']);
-    $title = $listing['itemName'];
-    $desc = $listing['itemDescription'];
-    $end_time = new DateTime($listing['endDateTime']);
-    $category = $listing['categoryName'];
-    $myprice = $listing['MAX(b.bidPrice)'];
-    
-    $query = "SELECT * FROM Bid WHERE itemID=$item_id ORDER BY bidID DESC";
-    $mybids = mysqli_query($connection, $query);
-
-
-
-    if (mysqli_num_rows($mybids) > 0){
-      $num_bids = mysqli_num_rows($mybids);
-      $price = mysqli_fetch_row($mybids)[4];
-    } else{
-      $num_bids = 0;
-      $price = 0;
-    }
-    
-    $now = new DateTime();
-    if ($now > $end_time) {
-      if ($myprice > $listing['reservePrice']) {
-        $status = 'Won';
-      } else {
-        $status = 'Loss';
-      }
-    } else {
-      $status = 'In progress';
-    }
-
-    print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time, $category, $status);
-  }
+  print_all_listings($connection, $result);
 
   // Close the connection as soon as it's no longer needed
   mysqli_close($connection);

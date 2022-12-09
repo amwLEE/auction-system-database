@@ -28,43 +28,10 @@
 
   // Perform a query to pull up their auctions.
   $query = "SELECT * FROM Auction a, Category c WHERE sellerID=$sellerID AND c.categoryID = a.categoryID ORDER BY itemID DESC";
-  $mylistings = mysqli_query($connection, $query);
-
+  $result = mysqli_query($connection, $query);
+  
   // Loop through results and print them out as list items.
-  while ($listing = mysqli_fetch_assoc($mylistings)){
-    $item_id = intval($listing['itemID']);
-    $title = $listing['itemName'];
-    $desc = $listing['itemDescription'];
-    $end_time = new DateTime($listing['endDateTime']);
-    $category = $listing['categoryName'];
-    
-    $query = "SELECT * FROM Bid WHERE itemID=$item_id ORDER BY bidID DESC";
-    $mybids = mysqli_query($connection, $query);
-
-    if (mysqli_num_rows($mybids) > 0){
-      $num_bids = mysqli_num_rows($mybids);
-      $price = mysqli_fetch_row($mybids)[4];
-    } else{
-      $num_bids = 0;
-      $price = 0;
-    }
-    
-    $now = new DateTime();
-    if ($now > $end_time) {
-      if ($price > $listing['reservePrice']) {
-        $status = 'Sold';
-      } else {
-        $status = 'Not sold';
-      }
-    } else {
-      $status = 'In progress';
-    }
-
-    print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time, $category, $status);
-  }
-
-  // Close the connection as soon as it's no longer needed
-  mysqli_close($connection);
+  print_all_listings($connection, $result);
 ?>
 
 <?php include_once("footer.php")?>

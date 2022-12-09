@@ -81,4 +81,54 @@ function print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time,
 );
 }
 
+// print_all_listings:
+// This function loops through all listings returned from a query and prints them out
+function print_all_listings($connection, $result) {
+  while ($listing = mysqli_fetch_assoc($result)){
+    $item_id = intval($listing['itemID']);
+    $title = $listing['itemName'];
+    $desc = $listing['itemDescription'];
+    $category = $listing['categoryName'];
+    $end_time = new DateTime($listing['endDateTime']);
+    
+    // get the latest bid (highest bid price)
+    $mybids = mysqli_query($connection, "SELECT * FROM Bid WHERE itemID=$item_id ORDER BY bidID DESC");
+    if (mysqli_num_rows($mybids) > 0){
+      $num_bids = mysqli_num_rows($mybids);
+      $price = mysqli_fetch_row($mybids)[4];
+    } else{
+      $num_bids = 0;
+      $price = 0;
+    }
+
+    // print out status of listing
+    $now = new DateTime();
+    if ($now > $end_time) {
+      if ($price > $listing['reservePrice']) {
+        $status = 'Sold';
+      } else {
+        $status = 'Not sold';
+      }
+    } else {
+      $status = 'In progress';
+    }
+
+    print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time, $category, $status);
+  }
+}
+
+// implode_arr:
+// implodes the itemIDs from the results of a query into an array
+// returns a single string containing all the itemIDs
+function implode_itemIDs($result) {
+  $arr = array();
+  while ($listing = mysqli_fetch_assoc($result)){
+    $arr[] = $listing['itemID'];
+  }
+  return implode(',', $arr);
+}
+
+
+
+
 ?>
