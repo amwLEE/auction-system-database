@@ -3,7 +3,8 @@
   require("database.php");
   require("utilities.php");
 
-  $_SESSION['pageType'] = 'bids';
+  $buyerID = check_user_type('buyer');
+  $pageType = 'bids';
 ?>
 
 <?php
@@ -42,7 +43,7 @@
   $result = mysqli_query($connection, $query);
 
   // Loop through results and print them out as list items.
-  print_all_listings($connection, $result);
+  print_all_listings($connection, $result, $buyerID, $pageType);
 
   // Close the connection as soon as it's no longer needed
   mysqli_close($connection);

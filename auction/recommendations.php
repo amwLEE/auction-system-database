@@ -3,21 +3,8 @@
   require("database.php");
   require("utilities.php");
 
-  $_SESSION['pageType'] = 'listings';
-?>
-
-<?php
-  // Check user's credentials from session
-  // Extract user ID from buyer accounts and deny access to all other account types
-  if (isset($_SESSION['account_type'])) {
-    if ($_SESSION['account_type'] == 'buyer') {
-      $buyerID = $_SESSION['userID'];
-    } else {
-      exit("<h5 class='access_denied'>Access denied: You do not have permission to view this page.</h5>");
-    }
-  } else {
-    exit("<h5 class='access_denied'>Access denied: You do not have permission to view this page.</h5>");
-  }
+  $buyerID = check_user_type('buyer');
+  $pageType = 'listings';
 ?>
 
 <div class="container">
@@ -68,7 +55,7 @@
       $result = mysqli_query($connection, $query);
       
       // Loop through results and print them out as list items.
-      print_all_listings($connection, $result);
+      print_all_listings($connection, $result, $buyerID, $pageType);
     }
   }
   
@@ -86,7 +73,7 @@
   $result = mysqli_query($connection, $query);
   
   // Loop through results and print them out as list items.
-  print_all_listings($connection, $result);
+  print_all_listings($connection, $result, $buyerID, $pageType);
 
   // Close the connection as soon as it's no longer needed
   mysqli_close($connection);

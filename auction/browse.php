@@ -3,7 +3,13 @@
   require("database.php");
   require("utilities.php");
 
-  $_SESSION['pageType'] = 'listings';
+  if (isset($_SESSION['userID'])) {
+    $userID = $_SESSION['userID'];
+  } else {
+    // To handle the case where no user is logged in
+    $userID = 0;
+  }
+  $pageType = 'listings'
 ?>
 
 
@@ -167,6 +173,7 @@
                 AND a.endDateTime>NOW()
                 ORDER BY endDateTime DESC
                 LIMIT ".(($curr_page-1)*$results_per_page).", $results_per_page";
+      echo "<h5>Listings sorted by soonest end date:</h5>";
 
     // newly listed
     } elseif ($ordering == "listDate"){     
@@ -176,10 +183,11 @@
                 AND a.endDateTime>NOW()
                 ORDER BY startDateTime DESC
                 LIMIT ".(($curr_page-1)*$results_per_page).", $results_per_page";
+      echo "<h5>Listings sorted by newly listed:</h5>";
     
     // bid price low to high, if item has no bids then starting price is used for comparison
     } elseif ($ordering == "priceLow"){    
-      $query = "SELECT a.itemID, a.itemName, a.itemDescription, c.categoryName, a.endDateTime, IFNULL(bidPrice, startingPrice) AS bidPrice 
+      $query = "SELECT a.itemID, a.itemName, a.itemDescription, c.categoryName, a.endDateTime, a.startingPrice, IFNULL(bidPrice, startingPrice) AS bidPrice 
                 FROM Auction a 
                 LEFT JOIN (SELECT itemID, MAX(bidPrice) AS bidPrice FROM Bid GROUP BY itemID) b 
                   on a.itemID = b.itemID
@@ -188,10 +196,11 @@
                 AND a.endDateTime>NOW()
                 ORDER BY bidPrice ASC
                 LIMIT ".(($curr_page-1)*$results_per_page).", $results_per_page";
+      echo "<h5>Listings sorted by lowest to highest price:</h5>";
 
     // bid price high to low, if item has no bids then starting price is used for comparison
     } elseif ($ordering == "priceHigh"){ 
-      $query = "SELECT a.itemID, a.itemName, a.itemDescription, c.categoryName, a.endDateTime, IFNULL(bidPrice, startingPrice) AS bidPrice 
+      $query = "SELECT a.itemID, a.itemName, a.itemDescription, c.categoryName, a.endDateTime, a.startingPrice, IFNULL(bidPrice, startingPrice) AS bidPrice 
                 FROM Auction a 
                 LEFT JOIN (SELECT itemID, MAX(bidPrice) AS bidPrice FROM Bid GROUP BY itemID) b 
                   on a.itemID = b.itemID
@@ -200,14 +209,11 @@
                 AND a.endDateTime>NOW()
                 ORDER BY bidPrice DESC
                 LIMIT ".(($curr_page-1)*$results_per_page).", $results_per_page";
+      echo "<h5>Listings sorted by highest to lowest price:</h5>";
     }
     $result = mysqli_query($connection, $query);
+    print_all_listings($connection, $result, $userID, $pageType);
 
-    // for testing purposes:
-    // while ($listing = mysqli_fetch_assoc($result)){
-    //   echo print_r($listing);
-    // }
-    print_all_listings($connection, $result);
   } else {
     echo "<br><h5>No listings match your search, please try again with a different query.</h5>";
   }

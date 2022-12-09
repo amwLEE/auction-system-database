@@ -25,8 +25,7 @@ require("database.php");
             } else {
                 $error_msg = 'An error occurred and your bid was not submitted';
             }
-            // Close the connection as soon as it's no longer needed
-            mysqli_close($connection);
+            
         }    
     }
     
