@@ -1,6 +1,6 @@
 <?php include_once("header.php")?>
-<?php require("database.php")?>
 <?php require("utilities.php")?>
+<?php require("database.php")?>
 
 <?php
   $url = $_SERVER['REQUEST_URI'];

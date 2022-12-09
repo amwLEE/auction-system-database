@@ -1,5 +1,5 @@
 <?php include_once("header.php")?>
-<?php require("database.php");?>
+<?php require("database.php")?>
 <?php require("utilities.php")?>
 
 <?php
@@ -35,6 +35,9 @@
   
   // Loop through results and print them out as list items.
   print_all_listings($connection, $result);
+
+  // Close the connection as soon as it's no longer needed
+  mysqli_close($connection);
 ?>
 
 <?php include_once("footer.php")?>

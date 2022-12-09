@@ -1,5 +1,6 @@
 <?php 
   include_once("header.php");
+  require("database.php");
   require("utilities.php");
 
   $_SESSION['pageType'] = 'browse';
@@ -111,8 +112,9 @@
   // Get listings corresponding to search keyword.
   // partial matching, i.e. any item name or description that contains the search keyword will be returned
   $query = "SELECT itemID from Auction           
-            WHERE itemName LIKE '%$keyword%'
-            OR itemDescription LIKE '%$keyword%'";  
+            WHERE endDateTime>NOW()
+            AND (itemName LIKE '%$keyword%'
+            OR itemDescription LIKE '%$keyword%')";  
   $result = mysqli_query($connection, $query);
   if (mysqli_num_rows($result) > 0){
     $searchResults = implode_colName($result, 'itemID');
@@ -122,7 +124,7 @@
 
   // Filter the search results by category.
   if ($category == "all") {
-    $query = "SELECT itemID FROM Auction WHERE itemID in ($searchResults)";
+    $query = "SELECT itemID FROM Auction WHERE itemID in ($searchResults) AND endDateTime>NOW()";
   } else {
     $query = "SELECT itemID 
               FROM Auction 
@@ -161,7 +163,8 @@
     if ($ordering == "endDate"){            
       $query = "SELECT * 
                 FROM Auction a INNER JOIN Category c on a.categoryID = c.categoryID 
-                WHERE itemID in ($filteredResults) 
+                WHERE a.itemID in ($filteredResults) 
+                AND a.endDateTime>NOW()
                 ORDER BY endDateTime DESC
                 LIMIT ".(($curr_page-1)*$results_per_page).", $results_per_page";
 
@@ -169,29 +172,32 @@
     } elseif ($ordering == "listDate"){     
       $query = "SELECT * 
                 FROM Auction a INNER JOIN Category c on a.categoryID = c.categoryID 
-                WHERE itemID in ($filteredResults) 
+                WHERE a.itemID in ($filteredResults) 
+                AND a.endDateTime>NOW()
                 ORDER BY startDateTime DESC
                 LIMIT ".(($curr_page-1)*$results_per_page).", $results_per_page";
     
     // bid price low to high, if item has no bids then starting price is used for comparison
     } elseif ($ordering == "priceLow"){    
-      $query = "SELECT *, IFNULL(bidPrice, startingPrice) AS bidPrice -- to replace NULL bidPrice with startingPrice
+      $query = "SELECT *, IFNULL(bidPrice, startingPrice) AS bidPrice 
                 FROM Auction a 
                 LEFT JOIN (SELECT itemID, MAX(bidPrice) AS bidPrice FROM Bid GROUP BY itemID) b 
                   on a.itemID = b.itemID
                 JOIN Category c on a.categoryID = c.categoryID
                 WHERE a.itemID in ($filteredResults)
+                AND a.endDateTime>NOW()
                 ORDER BY bidPrice ASC
                 LIMIT ".(($curr_page-1)*$results_per_page).", $results_per_page";
 
     // bid price high to low, if item has no bids then starting price is used for comparison
     } elseif ($ordering == "priceHigh"){ 
-      $query = "SELECT *, IFNULL(bidPrice, startingPrice) AS bidPrice -- to replace NULL bidPrice with startingPrice
+      $query = "SELECT *, IFNULL(bidPrice, startingPrice) AS bidPrice 
                 FROM Auction a 
                 LEFT JOIN (SELECT itemID, MAX(bidPrice) AS bidPrice FROM Bid GROUP BY itemID) b 
                   on a.itemID = b.itemID
                 JOIN Category c on a.categoryID = c.categoryID
                 WHERE a.itemID in ($filteredResults)
+                AND a.endDateTime>NOW()
                 ORDER BY bidPrice DESC
                 LIMIT ".(($curr_page-1)*$results_per_page).", $results_per_page";
     }
@@ -205,6 +211,8 @@
   } else {
     echo "<br><h5>No listings match your search, please try again with a different query.</h5>";
   }
+  // Close the connection as soon as it's no longer needed
+  mysqli_close($connection);
 ?>
 
 <!-- Pagination for results listings -->

@@ -6,7 +6,7 @@
 
 // For now, I will just set session variables and redirect.
 
-include 'database.php';
+require("database.php");
 
 if(!isset($_SESSION)) 
 { 

@@ -1,5 +1,6 @@
 <?php
   include_once("header.php");
+  require("database.php");
 
   // If user is not logged in or not a seller, they should not be able to
   // use this page.

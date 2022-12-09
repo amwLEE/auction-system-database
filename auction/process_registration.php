@@ -1,5 +1,5 @@
 <?php
-include 'database.php';
+require("database.php");
 
 $errors = array();
 
@@ -41,10 +41,10 @@ if (isset($_POST['submit']))
     // Check if email has already been registered in the database
     if (empty($errors))
     {
-        $query = mysqli_query($connection, "SELECT * FROM Users WHERE email='{$email}'");
+        $result = mysqli_query($connection, "SELECT * FROM Users WHERE email='{$email}'");
 
         // Email already exists in database
-        if (mysqli_num_rows($query) > 0)
+        if (mysqli_num_rows($result) > 0)
         {
             $errors[] = 'Email is already in use, please register using a different email.';
         }
@@ -53,8 +53,10 @@ if (isset($_POST['submit']))
             // Email does not already exist in database, insert new user account
             mysqli_query($connection, "INSERT INTO Users (firstName, lastName, email, userPassword, account_type)
         		VALUES ('$firstName','$lastName','$email', SHA('$password'), '$account_type')");
-            $query = mysqli_query($connection, "SELECT * FROM Users WHERE email='{$email}'");
-            if (mysqli_num_rows($query) == 1)
+            $result = mysqli_query($connection, "SELECT * FROM Users WHERE email='{$email}'");
+
+            mysqli_close($connection);
+            if (mysqli_num_rows($result) == 1)
             {
                 $success = true;
             }

@@ -1,7 +1,7 @@
 <?php
 // TODO: Extract $_POST variables, check they're OK, and attempt to make a bid.
 // Notify user of success/failure and redirect/give navigation options.
-include 'database.php';
+require("database.php");
    
     if (isset($_POST['submitBidForm'])){
         // Add data to Bid table in AuctionDB database
@@ -25,6 +25,9 @@ include 'database.php';
             } else {
                 $error_msg = 'An error occurred and your bid was not submitted';
             }
+            // Close the connection as soon as it's no longer needed
+            mysqli_close($connection);
         }    
     }
+    
 ?>

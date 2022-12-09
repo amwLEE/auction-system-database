@@ -1,5 +1,6 @@
 <?php include_once("header.php")?>
 <?php require("utilities.php")?>
+<?php require("database.php")?>
 
 <?php
   // Check user's credentials from session

@@ -3,8 +3,6 @@
   { 
       session_start(); 
   } 
-
-  include 'database.php';
 ?>
 
 <!doctype html>

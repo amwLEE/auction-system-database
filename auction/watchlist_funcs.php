@@ -30,7 +30,6 @@ else if ($_POST['functionname'] == "remove_from_watchlist") {
 echo $data;
 
 // Close the connection as soon as it's no longer needed
-
 mysqli_close($connection);
 
 

@@ -1,5 +1,6 @@
 <?php 
     include_once('header.php');
+    require("database.php");
 ?>
 
 <div class="container my-5">
@@ -83,9 +84,10 @@
             }
         }
     }
+
     // Close the connection as soon as it's no longer needed
     mysqli_close($connection);
-
+    
     ?>
 
 </div>
