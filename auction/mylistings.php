@@ -27,7 +27,10 @@
   // the shared "utilities.php" where they can be shared by multiple files.
 
   // Perform a query to pull up their auctions.
-  $query = "SELECT * FROM Auction a, Category c WHERE sellerID=$sellerID AND c.categoryID = a.categoryID ORDER BY itemID DESC";
+  $query = "SELECT * 
+            FROM Auction a INNER JOIN Category c ON c.categoryID = a.categoryID 
+            WHERE sellerID = $sellerID 
+            ORDER BY itemID DESC";
   $result = mysqli_query($connection, $query);
   
   // Loop through results and print them out as list items.

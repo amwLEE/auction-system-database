@@ -1,5 +1,4 @@
 <?php include_once("header.php")?>
-<?php require("database.php");?>
 <?php require("utilities.php")?>
 
 <?php
@@ -27,10 +26,14 @@
   // the shared "utilities.php" where they can be shared by multiple files.
 
   // Perform a query to pull up auctions they might be interested in.
-  $query = "SELECT itemID, COUNT(itemID) FROM Bid WHERE buyerID=$buyerID GROUP BY itemID,bidTimeStamp ORDER BY bidTimeStamp DESC";
+  $query = "SELECT itemID, COUNT(itemID) 
+            FROM Bid 
+            WHERE buyerID=$buyerID 
+            GROUP BY itemID,bidTimeStamp 
+            ORDER BY bidTimeStamp DESC";
   $result = mysqli_query($connection, $query);
-  if (mysqli_num_rows($result) != 0){
-    $myitems = implode_itemIDs($result);
+  if (mysqli_num_rows($result) > 0){
+    $myitems = implode_colName($result, 'itemID');
 
     $query = "SELECT buyerID, COUNT(buyerID)
               FROM Bid
@@ -38,20 +41,25 @@
               GROUP BY buyerID
               ORDER BY 2 DESC";
     $result = mysqli_query($connection, $query);
-    $myneighbours = implode_itemIDs($result);
+    $myneighbours = implode_colName($result, 'buyerID');
 
     $query = "SELECT b.itemID, COUNT(b.itemID)
-              FROM Bid b
-              INNER JOIN Auction a ON a.itemID = b.itemID AND(b.buyerID IN ($myneighbours)) AND (b.itemID NOT IN ($myitems)) AND a.endDateTime > NOW()
+              FROM Bid b INNER JOIN Auction a ON a.itemID = b.itemID 
+              WHERE (b.buyerID IN ($myneighbours)) 
+                AND (b.itemID NOT IN ($myitems)) 
+                AND a.endDateTime > NOW()
               GROUP BY b.itemID
               ORDER BY 2 DESC
               LIMIT 0,5";
     $result = mysqli_query($connection, $query);
-    $recommendation = implode_itemIDs($result);
+    $recommendation = implode_colName($result, 'itemID');
 
-    if ($arr) {
+    if ($recommendation) {
       echo "<br><h5>You might want to bid on the sorts of things other people, who have also bid on the sorts of things you have previously bid on, are currently bidding on.</h5>";
-      $query = "SELECT * FROM Auction a, Category c WHERE itemID IN ($recommendation) AND a.categoryID = c.categoryID ORDER BY FIELD(itemID,$recommendation)";
+      $query = "SELECT * 
+                FROM Auction a INNER JOIN Category c ON a.categoryID = c.categoryID
+                WHERE itemID IN ($recommendation)  
+                ORDER BY FIELD(itemID,$recommendation)";
       $result = mysqli_query($connection, $query);
       
       // Loop through results and print them out as list items.
@@ -61,13 +69,13 @@
   
   echo "<br><h5>Check out these trending auction listings.</h5>";
   $query = "SELECT b.itemID, COUNT(b.itemID), MAX(b.bidTimeStamp)
-            FROM Auction a, Bid b
-            WHERE a.itemID=b.itemID AND a.endDateTime>NOW()
+            FROM Auction a INNER JOIN Bid b ON a.itemID=b.itemID 
+            WHERE a.endDateTime>NOW()
             GROUP BY b.itemID
             ORDER BY 2 DESC, 3 DESC, a.endDateTime ASC
             LIMIT 0,5";      
   $result = mysqli_query($connection, $query);
-  $recommendation = implode_itemIDs($result);
+  $recommendation = implode_colName($result, 'itemID');
 
   $query = "SELECT * FROM Auction a, Category c WHERE itemID IN ($recommendation) AND a.categoryID = c.categoryID ORDER BY FIELD(itemID,$recommendation)";
   $result = mysqli_query($connection, $query);

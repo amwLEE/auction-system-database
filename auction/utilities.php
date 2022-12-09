@@ -77,14 +77,15 @@ function print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time,
       $num_bids . $bid . '<br/>' .
       $time_remaining .
     '</div>
-  </li>'
-);
+    </li>'
+  );
 }
 
 // print_all_listings:
 // This function loops through all listings returned from a query and prints them out
 function print_all_listings($connection, $result) {
   while ($listing = mysqli_fetch_assoc($result)){
+    // get listing details
     $item_id = intval($listing['itemID']);
     $title = $listing['itemName'];
     $desc = $listing['itemDescription'];
@@ -96,7 +97,7 @@ function print_all_listings($connection, $result) {
     if (mysqli_num_rows($mybids) > 0){
       $num_bids = mysqli_num_rows($mybids);
       $price = mysqli_fetch_row($mybids)[4];
-    } else{
+    } else {
       $num_bids = 0;
       $price = 0;
     }
@@ -112,23 +113,21 @@ function print_all_listings($connection, $result) {
     } else {
       $status = 'In progress';
     }
-
     print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time, $category, $status);
   }
 }
 
 // implode_arr:
-// implodes the itemIDs from the results of a query into an array
-// returns a single string containing all the itemIDs
-function implode_itemIDs($result) {
+// implodes the values in a specific column from the results of a query
+// returns a single string containing all the values in the specified column, separated by commas
+function implode_colName($result, $colName) {
   $arr = array();
   while ($listing = mysqli_fetch_assoc($result)){
-    $arr[] = $listing['itemID'];
+    $arr[] = $listing[$colName];
   }
-  return implode(',', $arr);
+  $imploded = implode(',', $arr);
+  return $imploded;
 }
-
-
 
 
 ?>

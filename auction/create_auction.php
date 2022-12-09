@@ -1,18 +1,11 @@
-<?php include_once("header.php")?>
-
 <?php
+  include_once("header.php");
+
   // If user is not logged in or not a seller, they should not be able to
   // use this page.
   if (!isset($_SESSION['account_type']) || $_SESSION['account_type'] != 'seller') {
     header('Location: browse.php');
   }
-
-  // Connect to database
-  include 'database.php';
-
-  // Get all the categories from category table
-  $sql = "SELECT * FROM Category";
-  $categories = mysqli_query($connection, $sql);
 ?>
 
 <div class="container">
@@ -51,13 +44,19 @@
             <select class="form-control" id="auctionCategory" name="auctionCategory">
               <option selected>Choose...</option>
               <?php
-                  while ($row = mysqli_fetch_assoc($categories)):;
+                // Get all the category Nnames from category table
+                $query = "SELECT * FROM Category";
+                $result = mysqli_query($connection, $query);
+                while ($row = mysqli_fetch_assoc($result)):;
               ?>
               <option value = "<?php echo $row["categoryID"];?>">
               <?php echo $row["categoryName"]; ?>
               </option>
             <?php
               endwhile;
+              
+              // Close the connection as soon as it's no longer needed
+              mysqli_close($connection);
             ?>
             </select>
             <small id="categoryHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> Select a category for this item.</small>
