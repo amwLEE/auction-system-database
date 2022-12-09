@@ -36,16 +36,17 @@
             $errors[] = 'Please fill in all required fields!';
         }
 
-        // Ensure that the auction title is a string, and has max 64 characters
+        // Ensure that the auction title is a string, and has max 64 bytes
         if (!is_string($title)) {
             $errors[] = 'Please ensure that your auction title is a string.';
         } else if (strlen($title) > 64) {
             $errors[] = 'Please shorten your auction title.';
         }
 
-        // 
-
-        // Ensure that the auction description is a string, and has max 255 bytes worth
+        // Ensure that the auction description is a string, and has max 255 bytes
+        if (empty($description)) {
+            $description = ""; // set it to empty
+        } 
         if (!is_string($description)) {
             $errors[] = 'Please ensure that your auction description is a string.';
         } else if (strlen($description) > 255) {
@@ -71,7 +72,7 @@
             
             if (mysqli_query($connection, $sql)) {
                 $itemID = mysqli_insert_id($connection);
-                $link_address = 'http://auctionsite/listing.php?item_id=' . $itemID; // NEED TO FIX
+                $link_address = 'listing.php?item_id=' . $itemID;
                 echo("<div class='text-center'>Auction successfully created! <a href=$link_address> View your new listing. </a></div>");
             } else {
                 echo 'Error: ' . $sql . '<br>' . mysqli_error($connection);
