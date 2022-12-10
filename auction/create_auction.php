@@ -59,7 +59,7 @@
             <select class="form-control" id="auctionCategory" name="auctionCategory">
               <option selected>Choose...</option>
               <?php
-                // Get all the category Nnames from category table
+                // Get all the category names from category table
                 $query = "SELECT * FROM Category";
                 $result = mysqli_query($connection, $query);
                 while ($row = mysqli_fetch_assoc($result)):;
