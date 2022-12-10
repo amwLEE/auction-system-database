@@ -22,7 +22,9 @@
       before they try to send it, but that kind of functionality should be
       extremely low-priority / only done after all database functions are
       complete. -->
-      <form method="post" action="create_auction_result.php">
+      <form method="post" action="create_auction_result.php" enctype= "multipart/form-data">
+
+        <!-- Title of auction -->
         <div class="form-group row">
           <label for="auctionTitle" class="col-sm-2 col-form-label text-right">Title of auction</label>
           <div class="col-sm-10">
@@ -30,6 +32,16 @@
             <small id="titleHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> A short description of the item you're selling, which will display in listings.</small>
           </div>
         </div>
+
+        <!-- Image of item -->
+        <div class="form-group row">
+          <label for="auctionImage" class="col-sm-2 col-form-label text-right">Image of item</label>
+          <div class="col-sm-10">
+            <input type="file" name="fileToUpload" id="fileToUpload">
+          </div>
+        </div>
+
+        <!-- Description of auction -->
         <div class="form-group row">
           <label for="auctionDetails" class="col-sm-2 col-form-label text-right">Details</label>
           <div class="col-sm-10">
@@ -37,6 +49,8 @@
             <small id="detailsHelp" class="form-text text-muted">Full details of the listing to help bidders decide if it's what they're looking for.</small>
           </div>
         </div>
+
+        <!-- Category of auction -->
         <div class="form-group row">
           <label for="auctionCategory" class="col-sm-2 col-form-label text-right">Category</label>
           <div class="col-sm-10">
@@ -55,14 +69,14 @@
               </option>
             <?php
               endwhile;
-              
-              // Close the connection as soon as it's no longer needed
               mysqli_close($connection);
             ?>
             </select>
             <small id="categoryHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> Select a category for this item.</small>
           </div>
         </div>
+
+        <!-- Starting price of auction -->
         <div class="form-group row">
           <label for="auctionStartPrice" class="col-sm-2 col-form-label text-right">Starting price</label>
           <div class="col-sm-10">
@@ -75,6 +89,8 @@
             <small id="startBidHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> Initial bid amount.</small>
           </div>
         </div>
+
+        <!-- Reserve price of auction -->
         <div class="form-group row">
           <label for="auctionReservePrice" class="col-sm-2 col-form-label text-right">Reserve price</label>
           <div class="col-sm-10">
@@ -87,6 +103,8 @@
             <small id="reservePriceHelp" class="form-text text-muted">Optional. Auctions that end below this price will not go through. This value is not displayed in the auction listing.</small>
           </div>
         </div>
+
+        <!-- Auction end date -->
         <div class="form-group row">
           <label for="auctionEndDate" class="col-sm-2 col-form-label text-right">End date</label>
           <div class="col-sm-10">
@@ -94,6 +112,8 @@
             <small id="endDateHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> Date and time for the auction to end.</small>
           </div>
         </div>
+
+        <!-- Submit button -->
         <button type="submit" name="submit" value="submit" class="btn btn-primary form-control">Create Auction</button>
       </form>
     </div>

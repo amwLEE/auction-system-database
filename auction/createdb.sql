@@ -52,7 +52,7 @@ CREATE TABLE Auction
 (
     itemID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     itemName VARCHAR(64) NOT NULL,
-    itemDescription VARCHAR(255) NOT NULL,
+    itemDescription VARCHAR(4000) NOT NULL,
     sellerID INT NOT NULL ,
     categoryID INT NOT NULL,
     startDateTime TIMESTAMP NOT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE Auction
 ENGINE = InnoDB;
 
 
--- Create table for bid
+-- Create table for bids
 DROP TABLE IF EXISTS Bid;
 
 CREATE TABLE Bid 
@@ -80,6 +80,8 @@ CREATE TABLE Bid
 )
 ENGINE = InnoDB;
 
+
+-- Create table for watchlist
 DROP TABLE IF EXISTS Watch;
 
 CREATE TABLE Watch
@@ -89,5 +91,16 @@ CREATE TABLE Watch
     itemID INT NOT NULL,
     FOREIGN KEY (userID) REFERENCES Users(userID),
     FOREIGN KEY (itemID) REFERENCES Auction(itemID)
+)
+ENGINE = InnoDB;
+
+
+-- Create table for images
+DROP TABLE IF EXISTS Images;
+
+CREATE TABLE Images
+(
+    itemID INT NOT NULL,
+    itemImage blob NOT NULL
 )
 ENGINE = InnoDB;

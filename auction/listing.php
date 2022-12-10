@@ -57,7 +57,6 @@
   // TODO: Note: Auctions that have ended may pull a different set of data,
   //       like whether the auction ended in a sale or was cancelled due
   //       to lack of high-enough bids. Or maybe not.
-  
   // Calculate time to auction end:
   $now = new DateTime();
   
@@ -69,7 +68,6 @@
   // TODO: If the user has a session, use it to make a query to the database
   //       to determine if the user is already watching this item.
   //       For now, this is hardcoded.
-
   if ((isset($_SESSION['logged_in'])) && ($_SESSION["logged_in"]==1 )){
     $queryWatch = "SELECT * FROM Watch WHERE userID = $userID and itemID = $item_id";
     $resultWatch = mysqli_query($connection, $queryWatch);
@@ -77,13 +75,11 @@
 
     if (mysqli_num_rows($resultWatch) == 0 ){
       $watching = false;
-      
-    }else{
+    } else { 
       $watching = true;
     }
 
-
-  }else{
+  } else {
     $has_session = false;
   }
 
@@ -102,10 +98,10 @@
         <div class="col-sm-4 align-self-center">
             <!-- Right col -->
             <?php
-  /* The following watchlist functionality uses JavaScript, but could
-     just as easily use PHP as in other places in the code */
-  if (($account_type == 'buyer')):
-?>
+            /* The following watchlist functionality uses JavaScript, but could
+             just as easily use PHP as in other places in the code */
+              if (($account_type == 'buyer')):
+            ?>
             <div id="watch_nowatch" <?php if ($has_session && $watching) echo('style="display: none"');?>>
                 <button type="button" class="btn btn-outline-secondary btn-sm" onclick="addToWatchlist()">+ Add to
                     watchlist</button>
@@ -120,40 +116,48 @@
     </div>
 
     <div class="row">
-        <!-- Row #2 with auction description + bidding info -->
-        <div class="col-sm-8">
-            <!-- Left col with item info -->
-
-            <?php
-  mysqli_data_seek($result, 0);
-  if ($now > $end_time) {
-    if ($num_bids == 0) {
-      $status = '<mark style="background: red">Not sold</mark>';
-    } elseif ($current_price < $auction['reservePrice']) {
-      $status = '<mark style="background: red">Not sold</mark>';
-    } else {
-      $status = '<mark style="background: green">Sold</mark>';
-    }
-  } else {
-    $status = '<mark style="background: orange">In progress</mark>';
-  }
-  ?>
-
-            <div class="itemDescription">
-                <?php echo($description); ?>
-                <?php echo "<div><mark style='background: lightblue'>$category_name</mark> $status</div>"; ?>
-            </div>
-
-            <div>
-                <img src="https://image.shutterstock.com/image-vector/coming-soon-grunge-rubber-stamp-260nw-196970096.jpg"
-                    alt="Coming soon">
-            </div>
-
+      <!-- Row #2 with auction description + bidding info -->
+      <div class="col-sm-8">
+        <!-- Left col with item info -->
+          <?php
+            // Get item status
+            mysqli_data_seek($result, 0);
+            if ($now > $end_time) {
+              if ($num_bids == 0) {
+                $status = '<mark style="background: red">Not sold</mark>';
+              } elseif ($current_price < $auction['reservePrice']) {
+                $status = '<mark style="background: red">Not sold</mark>';
+              } else {
+                $status = '<mark style="background: green">Sold</mark>';
+              }
+            } else {
+              $status = '<mark style="background: orange">In progress</mark>';
+            }
+          ?>
+        <div class="itemDescription">
+            <?php echo($description); ?>
+            <?php echo "<div><mark style='background: lightblue'>$category_name</mark> $status</div>"; ?>
         </div>
+          
+          
+        <div>
+          <?php
+            // Get uploaded image of item if there is one
+            $query = "SELECT * FROM Images WHERE itemID=$item_id";
+            $result = mysqli_query($connection, $query);
+            while ($row = mysqli_fetch_assoc($result)) {
+              $image = $row['itemImage'];
+          ?>
+            <img src= <?php echo $image ?> height=500 width=600>
+          <?php 
+            }
+          ?>
+        </div>
+
+      </div>
 
         <div class="col-sm-4">
             <!-- Right col with bidding info -->
-
             <p>
                 <?php if ($now > $end_time): ?>
                 This auction ended <?php echo(date_format($end_time, 'j M Y H:i')) ?>
@@ -165,41 +169,40 @@
             <?php if ($account_type == 'buyer'): ?>
             <p class="lead"><?php echo 'Starting price: £' . number_format($starting_price, 2); ?></p>
             <p class="lead">
-                <?php
-      if ($num_bids>0) {
-        echo 'Current bid: £';
-        echo(number_format($current_price, 2));
-      }
-      ?>
+            <?php
+              if ($num_bids>0) {
+                echo 'Current bid: £';
+                echo(number_format($current_price, 2));
+              }
+            ?>
 
 
-                <!-- Bidding form -->
+            <!-- Bidding form -->
             <form method="POST">
-                <div class="message">
-                    <?php
-          include 'place_bid.php';                    
-          global $error_msg;
-          if (isset($success) && ($success == true)){
-            echo '<p style="color:green;">Your bid has been submitted successfully! This page will automatically refresh in 3 seconds...<p>';
-            echo "<meta http-equiv='refresh' content='3'>";
-          }else{
-            echo '<p style="color:red;">'.$error_msg.'</p>'; //display error message
-          }
-        ?>
-                </div>
-
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">£</span>
-                    </div>
-                    <input type="number" class="form-control" id="bid" name="bidPrice"
-                        placeholder="<?=number_format($current_price+0.01, 2)?>" min="<?=$current_price+0.01?>"
-                        step="0.01" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)">
-                </div>
-                <small id="bidPriceHelp" class="form-text text-muted"><span class="text-danger">*
-                        Required.</span></small>
-                <button type="submit" class="btn btn-primary form-control" name="submitBidForm"
-                    value="submitBidForm">Place bid</button>
+              <div class="message">
+                <?php
+                  include 'place_bid.php';                    
+                  global $error_msg;
+                  if (isset($success) && ($success == true)){
+                    echo '<p style="color:green;">Your bid has been submitted successfully! This page will automatically refresh in 3 seconds...<p>';
+                    echo "<meta http-equiv='refresh' content='3'>";
+                  }else{
+                    echo '<p style="color:red;">'.$error_msg.'</p>'; //display error message
+                  }
+                ?>
+              </div>
+              <div class="input-group">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text">£</span>
+                  </div>
+                  <input type="number" class="form-control" id="bid" name="bidPrice"
+                      placeholder="<?=number_format($current_price+0.01, 2)?>" min="<?=$current_price+0.01?>"
+                      step="0.01" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)">
+              </div>
+              <small id="bidPriceHelp" class="form-text text-muted"><span class="text-danger">*
+                      Required.</span></small>
+              <button type="submit" class="btn btn-primary form-control" name="submitBidForm"
+                  value="submitBidForm">Place bid</button>
             </form>
             <?php endif ?>
             <?php endif ?>
@@ -208,13 +211,13 @@
             <p class="lead"><?php echo 'Starting price: £' . number_format($starting_price, 2); ?></p>
             <p class="lead"><?php echo 'Reserve price: £' . number_format($reserve_price, 2); ?></p>
             <p class="lead">
-                <?php
-      if ($num_bids>0) {
-        echo 'Current bid: £' . number_format($current_price, 2);
-      } else {
-        echo 'Current bid: £' . number_format(0, 2);
-      }
-    ?>
+            <?php
+              if ($num_bids>0) {
+                echo 'Current bid: £' . number_format($current_price, 2);
+              } else {
+                echo 'Current bid: £' . number_format(0, 2);
+              }
+            ?>
             </p>
             <?php endif ?>
 
@@ -224,24 +227,24 @@
             <?php if ($num_bids > 0): ?>
             <table border="1">
                 <thead>
-                    <tr>
-                        <th>Bid ID</th>
-                        <th>User ID</th>
-                        <th>UTC Timestamp</th>
-                        <th>Bid Price</th>
-                    </tr>
+                  <tr>
+                    <th>Bid ID</th>
+                    <th>User ID</th>
+                    <th>UTC Timestamp</th>
+                    <th>Bid Price</th>
+                  </tr>
                 </thead>
 
                 <tbody>
-                    <?php mysqli_data_seek($result, 0); ?>
-                    <?php while ($bid = mysqli_fetch_assoc($result)): ?>
-                    <tr>
-                        <td><?php echo $bid['bidID']; ?></td>
-                        <td><?php echo $bid['buyerID']; ?></td>
-                        <td><?php echo $bid['bidTimeStamp']; ?></td>
-                        <td><?php echo "£" . $bid['bidPrice']; ?></td>
-                    </tr>
-                    <?php endwhile ?>
+                  <?php mysqli_data_seek($result, 0); ?>
+                  <?php while ($bid = mysqli_fetch_assoc($result)): ?>
+                  <tr>
+                      <td><?php echo $bid['bidID']; ?></td>
+                      <td><?php echo $bid['buyerID']; ?></td>
+                      <td><?php echo $bid['bidTimeStamp']; ?></td>
+                      <td><?php echo "£" . $bid['bidPrice']; ?></td>
+                  </tr>
+                  <?php endwhile ?>
                 </tbody>
             </table>
             <br>
@@ -249,27 +252,26 @@
 
             <h6>Remarks</h6>
             <?php
-mysqli_data_seek($result, 0);
-if ($now > $end_time) {
-  if ($num_bids == 0) {
-    echo "<span style='color:red;'>This item was not sold because there were no bids</span>";
-  } elseif ($current_price < $auction['reservePrice']) {
-    echo "<span style='color:red;'>This item was not sold because reserve price not met</span>";
-  } else {
-    $winner = mysqli_fetch_row($result)[2];
-    echo "This item was sold to User#$winner";
-  }
-} else {
-  echo "This auction is still in progress";
-}
-// Close the connection as soon as it's no longer needed
-mysqli_close($connection);
-?>
+              mysqli_data_seek($result, 0);
+              if ($now > $end_time) {
+                if ($num_bids == 0) {
+                  echo "<span style='color:red;'>This item was not sold because there were no bids</span>";
+                } elseif ($current_price < $auction['reservePrice']) {
+                  echo "<span style='color:red;'>This item was not sold because reserve price not met</span>";
+                } else {
+                  $winner = mysqli_fetch_row($result)[2];
+                  echo "This item was sold to User#$winner";
+                }
+              } else {
+                echo "This auction is still in progress";
+              }
+              // Close the connection as soon as it's no longer needed
+              mysqli_close($connection);
+            ?>
 
-        </div> <!-- End of right col with bidding info -->
+      </div> <!-- End of right col with bidding info -->
 
     </div> <!-- End of row #2 -->
-
 
 
     <?php include_once("footer.php")?>
