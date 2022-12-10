@@ -163,7 +163,7 @@ function print_all_listings($connection, $result, $userID, $pageType) {
     // print out status of listing
     $now = new DateTime();
     if ($now > $end_time) {
-      if ($price > $listing['reservePrice']) {
+      if ($price >= $listing['reservePrice']) {
         if ($pageType == 'bids') {
           $status = 'Won';
         } else {
