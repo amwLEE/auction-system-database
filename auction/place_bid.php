@@ -1,7 +1,8 @@
 <?php
 // TODO: Extract $_POST variables, check they're OK, and attempt to make a bid.
 // Notify user of success/failure and redirect/give navigation options.
-require("database.php");
+include 'database.php';
+include 'sendEmail.php';
    
     if (isset($_POST['submitBidForm'])){
         // Add data to Bid table in AuctionDB database
@@ -22,6 +23,7 @@ require("database.php");
             $query = mysqli_query($connection, "SELECT * FROM bid WHERE buyerID=$buyerID AND bidTimeStamp=NOW()");
             if (mysqli_num_rows($query) == 1 ){
                 $success = true;
+                emailWatcher($itemID, $buyerID, $bidPrice);
             } else {
                 $error_msg = 'An error occurred and your bid was not submitted';
             }
