@@ -152,7 +152,7 @@
               }
             }
           ?>
-            <img src= <?php echo $image ?> height=500 width=600>
+            <img src= <?php echo $image ?> height=500 width=500>
         </div>
           
           

@@ -100,7 +100,9 @@ DROP TABLE IF EXISTS Images;
 
 CREATE TABLE Images
 (
-    itemID INT NOT NULL,
-    itemImage blob NOT NULL
+    itemID INT NOT NULL ,
+    itemImage blob NOT NULL,
+    FOREIGN KEY (itemID) REFERENCES Auction(itemID) ON DELETE CASCADE
+
 )
 ENGINE = InnoDB;

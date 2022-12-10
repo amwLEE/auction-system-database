@@ -171,7 +171,7 @@
                 FROM Auction a INNER JOIN Category c on a.categoryID = c.categoryID 
                 WHERE a.itemID in ($filteredResults) 
                 AND a.endDateTime>NOW()
-                ORDER BY endDateTime DESC
+                ORDER BY a.endDateTime ASC
                 LIMIT ".(($curr_page-1)*$results_per_page).", $results_per_page";
       echo "<h5>Listings sorted by soonest end date:</h5>";
 
