@@ -138,43 +138,47 @@
             <?php echo($description); ?>
             <?php echo "<div><mark style='background: lightblue'>$category_name</mark> $status</div>"; ?>
         </div>
-          
-          
+
         <div>
           <?php
             // Get uploaded image of item if there is one
             $query = "SELECT * FROM Images WHERE itemID=$item_id";
-            $result = mysqli_query($connection, $query);
-            while ($row = mysqli_fetch_assoc($result)) {
-              $image = $row['itemImage'];
-          ?>
-            <img src= <?php echo $image ?> height=500 width=600>
-          <?php 
+            $imgresult = mysqli_query($connection, $query);
+            if (mysqli_num_rows($imgresult) == 0) {
+              $image = "img/no_image.png";
+            } else {
+              while ($row = mysqli_fetch_assoc($imgresult)) {
+                $image = $row['itemImage'];
+              }
             }
           ?>
+            <img src= <?php echo $image ?> height=500 width=600>
         </div>
+          
+          
+
 
       </div>
 
         <div class="col-sm-4">
-            <!-- Right col with bidding info -->
-            <p>
-                <?php if ($now > $end_time): ?>
-                This auction ended <?php echo(date_format($end_time, 'j M Y H:i')) ?>
-                <!-- TODO: Print the result of the auction here? -->
-                <?php else: ?>
-                Auction ends <?php echo(date_format($end_time, 'j M Y H:i') . $time_remaining) ?>
-            </p>
+          <!-- Right col with bidding info -->
+          <p>
+              <?php if ($now > $end_time): ?>
+              This auction ended <?php echo(date_format($end_time, 'j M Y H:i')) ?>
+              <!-- TODO: Print the result of the auction here? -->
+              <?php else: ?>
+              Auction ends <?php echo(date_format($end_time, 'j M Y H:i') . $time_remaining) ?>
+          </p>
 
-            <?php if ($account_type == 'buyer'): ?>
-            <p class="lead"><?php echo 'Starting price: £' . number_format($starting_price, 2); ?></p>
-            <p class="lead">
-            <?php
-              if ($num_bids>0) {
-                echo 'Current bid: £';
-                echo(number_format($current_price, 2));
-              }
-            ?>
+          <?php if ($account_type == 'buyer'): ?>
+          <p class="lead"><?php echo 'Starting price: £' . number_format($starting_price, 2); ?></p>
+          <p class="lead">
+          <?php
+            if ($num_bids>0) {
+              echo 'Current bid: £';
+              echo(number_format($current_price, 2));
+            }
+          ?>
 
 
             <!-- Bidding form -->
