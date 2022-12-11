@@ -269,8 +269,6 @@
               } else {
                 echo "This auction is still in progress";
               }
-              // Close the connection as soon as it's no longer needed
-              mysqli_close($connection);
             ?>
 
       </div> <!-- End of right col with bidding info -->
