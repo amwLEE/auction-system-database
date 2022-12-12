@@ -54,7 +54,7 @@
       $subject = "Bid Update for ".$itemName;
       
       //Outbid
-      $query = "SELECT u.userID, u.firstName, u.email, b.bidPrice FROM Users u, Bid b WHERE u.userID=b.buyerID AND u.userID<>$newbidder ORDER BY b.bidPrice DESC LIMIT 1,1";
+      $query = "SELECT u.userID, u.firstName, u.email, b.bidPrice FROM Users u, Bid b WHERE b.itemID=$itemID AND u.userID=b.buyerID AND u.userID<>$newbidder ORDER BY b.bidPrice DESC LIMIT 0,1";
       $result = mysqli_query($connection, $query);
       if ($row = mysqli_fetch_assoc($result)) {
          $recipientID = $row["userID"];

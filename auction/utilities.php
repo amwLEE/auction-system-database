@@ -153,8 +153,10 @@ function print_all_listings($connection, $result, $userID, $pageType) {
     // get the latest bid (highest bid price)
     $mybids = mysqli_query($connection, "SELECT * FROM Bid WHERE itemID=$item_id ORDER BY bidID DESC");
     if (mysqli_num_rows($mybids) > 0){
+      $latestBid = mysqli_fetch_row($mybids);
+      $buyerID = $latestBid[2];
+      $price = $latestBid[4];
       $num_bids = mysqli_num_rows($mybids);
-      $price = mysqli_fetch_row($mybids)[4];
     } else {
       $num_bids = 0;
       $price = $listing['startingPrice'];
@@ -165,7 +167,11 @@ function print_all_listings($connection, $result, $userID, $pageType) {
     if ($now > $end_time) {
       if ($price >= $listing['reservePrice']) {
         if ($pageType == 'bids') {
-          $status = 'Won';
+          if ($buyerID == $userID) {
+            $status = 'Won';
+          } else {
+            $status = 'Loss';
+          }
         } else {
           $status = 'Sold';
         }

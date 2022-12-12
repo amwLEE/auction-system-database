@@ -110,13 +110,13 @@ VALUES
     ("MISTY LIGHTHOUSE SEASCAPE ART", "ORIGINAL PAINTING 12 x 12 inch by JOHN SILVER", 1, 1, TIMESTAMP("2022-11-06 18:20:24"), TIMESTAMP("2022-12-25 23:59:59"), 300.00, 400.00),
     ("4 Zone Ceramic Hob", "Electrolux 60cm Black EHF6241FOK LF43488", 17, 5, TIMESTAMP("2022-11-09 02:44:02"), TIMESTAMP("2022-12-25 00:00:00"), 279.00, 279.00),
     ("PINK ROSES OIL PAINTING", "VIVEK MANDALIA IMPRESSIONISM 12X12 WALL ART ORIGINAL", 42, 1, TIMESTAMP("2022-11-09 10:55:23"), TIMESTAMP("2022-12-31 23:59:59"), 1000.00, 1200.00),
-    ("Jane Palmer Art original", "Still Life Oil painting , Lemon And Lime Slices", 37, 1, TIMESTAMP("2022-11-10 21:26:01"), TIMESTAMP("2023-01-09 12:00:00"), 420.00, 500.00),
+    ("Jane Palmer Art original", "Still Life Oil painting , Lemon And Lime Slices", 1, 1, TIMESTAMP("2022-11-10 21:26:01"), TIMESTAMP("2023-01-09 12:00:00"), 420.00, 500.00),
     ("KENWOOD Prospero+", "KHC29.H0SI 4-in-1 Stand Mixer - Silver", 4, 5, TIMESTAMP("2022-11-11 04:22:34"), TIMESTAMP("2022-12-31 23:59:59"), 150.00, 150.00),
     ("Bedside Cabinet", "Wooden Scandi Legs Modern Bedroom Furniture", 15, 4, TIMESTAMP("2022-11-11 10:00:00"), TIMESTAMP("2023-01-31 12:00:00"), 55.00, 55.00),
     ("Countertop Blender", "Onyx Black 5 Speeds", 29, 5, TIMESTAMP("2022-11-14 05:53:33"), TIMESTAMP("2023-01-30 11:59:59"), 120.00, 120.00),
     ("ALBERTA FERRETTI Women's Jacket", "size UK 8", 11, 3, TIMESTAMP("2022-11-14 08:00:00"), TIMESTAMP("2022-11-30 23:59:59"), 25.00, 120.00),
-    ("WINDOWS 11 Lenovo ThinkPad", "X250 Core i5 8GB Ram 240GB SSD Laptop", 9, 2, TIMESTAMP("2022-11-15 00:00:00"), TIMESTAMP("2023-01-20 23:59:59"), 120.00, 120.00),
-    ("Gaming PC Quad", "Core i7 3.40 GHz GTX 1630 16GB DDR3 2TB HDD 480GB SSD Windows 11", 40, 2, TIMESTAMP("2022-11-15 05:32:40"), TIMESTAMP("2023-01-09 00:00:00"), 200.00, 270.00),
+    ("WINDOWS 11 Lenovo ThinkPad", "X250 Core i5 8GB Ram 240GB SSD Laptop", 9, 2, TIMESTAMP("2022-11-15 00:00:00"), TIMESTAMP("2022-12-12 05:15:00"), 120.00, 120.00),
+    ("Gaming PC Quad", "Core i7 3.40 GHz GTX 1630 16GB DDR3 2TB HDD 480GB SSD Windows 11", 40, 2, TIMESTAMP("2022-11-15 05:32:40"), TIMESTAMP("2022-12-12 04:45:00"), 200.00, 270.00),
     ("Roughley - Surrealist 1973", "Oil, The Birth Of Music", 33, 1, TIMESTAMP("2022-11-15 15:27:20"), TIMESTAMP("2023-01-10 23:59:59"), 400.00, 500.00),
     ("2 Seater Sofa", "New Scandinavian Style", 7, 4, TIMESTAMP("2022-11-15 15:53:23"), TIMESTAMP("2023-01-05 23:59:59"), 785.00, 785.00),
     ("Omani Emirati Thobe Jubba", "For Men Designer Kaftan Kandora Arab POPULAR", 17, 3, TIMESTAMP("2022-11-16 13:45:32"), TIMESTAMP("2023-01-30 23:59:59"), 25.00, 25.00),
@@ -124,7 +124,7 @@ VALUES
     ("Mens African Dashiki Ethnic Shirts", "Long Sleeve Short Kaftan Blouse Tops", 42, 3, TIMESTAMP("2022-11-17 12:52:23"), TIMESTAMP("2023-01-09 23:59:59"), 14.99, 14.99),
     ("Painting Abstract Circle Hilma Af Klint 1915", "No 14 Swan Framed Art 12x16 Inch", 1, 1, TIMESTAMP("2022-11-17 23:05:27"), TIMESTAMP("2023-01-31 23:59:59"), 25.00, 25.00),
     ("Mini Food Chopper", "Food Processor Empire Red", 45, 5, TIMESTAMP("2022-11-18 19:22:35"), TIMESTAMP("2023-01-12 12:00:00"), 42.00, 79.00),
-    ("Gaming PC", "Refurbished by Professionals", 29, 2, TIMESTAMP("2022-11-18 23:22:56"), TIMESTAMP("2023-01-31 23:59:59"), 200.00, 230.00);
+    ("Gaming PC", "Refurbished by Professionals", 29, 2, TIMESTAMP("2022-11-18 23:22:56"), TIMESTAMP("2022-12-12 04:15:00"), 200.00, 230.00);
 
 -- Insert illustrative data for bid
 INSERT INTO Bid (itemID, buyerID, bidTimeStamp, bidPrice)  
@@ -144,7 +144,7 @@ VALUES
     (11, 26, TIMESTAMP("2022-09-29 00:32:10"), 50.00),
     (11, 49, TIMESTAMP("2022-09-29 07:23:23"), 52.00),
     (14, 6, TIMESTAMP("2022-09-29 13:43:34"), 140.00),
-    (22, 25, TIMESTAMP("2022-10-15 11:43:54"), 200.00),
+    (9, 25, TIMESTAMP("2022-10-15 11:43:54"), 550.00),
     (20, 28, TIMESTAMP("2022-10-20 12:43:19"), 5.00),
     (16, 19, TIMESTAMP("2022-10-24 21:43:24"), 100.00),
     (22, 34, TIMESTAMP("2022-10-25 21:32:55"), 220.00),
@@ -173,12 +173,12 @@ VALUES
     (27, 28, TIMESTAMP("2022-11-15 03:55:33"), 50.00),
     (40, 23, TIMESTAMP("2022-11-15 21:43:29"), 55.00),
     (39, 36, TIMESTAMP("2022-11-15 21:47:21"), 121.00),
-    (42, 38, TIMESTAMP("2022-11-15 23:34:29"), 200.00),
+    (42, 19, TIMESTAMP("2022-11-15 23:34:29"), 200.00),
     (45, 49, TIMESTAMP("2022-11-16 21:32:55"), 25.00),
-    (44, 25, TIMESTAMP("2022-11-16 23:53:21"), 785.00),
-    (43, 28, TIMESTAMP("2022-11-17 14:54:46"), 400.00),
+    (44, 36, TIMESTAMP("2022-11-16 23:53:21"), 785.00),
+    (50, 6, TIMESTAMP("2022-11-17 14:54:46"), 200.00),
     (46, 49, TIMESTAMP("2022-11-17 19:33:55"), 35.00),
-    (49, 44, TIMESTAMP("2022-11-18 21:32:55"), 45.00);
+    (39, 6, TIMESTAMP("2022-11-18 21:32:55"), 130.00);
 
 
 -- Insert illustrative data for Images
