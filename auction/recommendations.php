@@ -18,20 +18,18 @@
   // the shared "utilities.php" where they can be shared by multiple files.
 
   // Perform a query to pull up auctions they might be interested in.
-  $query = "SELECT itemID, COUNT(itemID) 
+  $query = "SELECT itemID
             FROM Bid 
             WHERE buyerID=$buyerID 
-            GROUP BY itemID,bidTimeStamp 
-            ORDER BY bidTimeStamp DESC";
+            GROUP BY itemID";
   $result = mysqli_query($connection, $query);
   if (mysqli_num_rows($result) > 0){
     $myitems = implode_colName($result, 'itemID');
 
-    $query = "SELECT buyerID, COUNT(buyerID)
+    $query = "SELECT buyerID
               FROM Bid
               WHERE (buyerID<>$buyerID) AND (itemID IN ($myitems))
-              GROUP BY buyerID
-              ORDER BY 2 DESC";
+              GROUP BY buyerID";
     $result = mysqli_query($connection, $query);
     $myneighbours = implode_colName($result, 'buyerID');
 
