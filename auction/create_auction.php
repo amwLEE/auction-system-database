@@ -62,10 +62,10 @@
                 // Get all the category names from category table
                 $query = "SELECT * FROM Category";
                 $result = mysqli_query($connection, $query);
-                while ($row = mysqli_fetch_assoc($result)):;
+                while ($categoryName = mysqli_fetch_assoc($result)):;
               ?>
-              <option value = "<?php echo $row["categoryID"];?>">
-              <?php echo $row["categoryName"]; ?>
+              <option value = "<?php echo $categoryName["categoryID"];?>">
+              <?php echo $category["categoryName"]; ?>
               </option>
             <?php
               endwhile;

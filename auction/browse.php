@@ -46,7 +46,7 @@
               Source: https://www.geeksforgeeks.org/create-a-drop-down-list-that-options-fetched-from-a-mysql-database-in-php/ -->
           <option value="all">All categories</option>
             <?php
-              // Get all the category Nnames from category table
+              // Get all the category names from category table
               $query = "SELECT * FROM Category";
               $result = mysqli_query($connection, $query);
               while ($categoryName = mysqli_fetch_assoc($result)):;
@@ -130,7 +130,7 @@
 
   // Filter the search results by category.
   if ($category == "all") {
-    $query = "SELECT itemID FROM Auction WHERE itemID in ($searchResults) AND endDateTime>NOW()";
+    $query = "SELECT itemID FROM Auction WHERE itemID in ($searchResults)";
   } else {
     $query = "SELECT itemID 
               FROM Auction 
@@ -170,7 +170,6 @@
       $query = "SELECT * 
                 FROM Auction a INNER JOIN Category c on a.categoryID = c.categoryID 
                 WHERE a.itemID in ($filteredResults) 
-                AND a.endDateTime>NOW()
                 ORDER BY a.endDateTime ASC
                 LIMIT ".(($curr_page-1)*$results_per_page).", $results_per_page";
       echo "<h5>Listings sorted by soonest end date:</h5>";
@@ -180,7 +179,6 @@
       $query = "SELECT * 
                 FROM Auction a INNER JOIN Category c on a.categoryID = c.categoryID 
                 WHERE a.itemID in ($filteredResults) 
-                AND a.endDateTime>NOW()
                 ORDER BY startDateTime DESC
                 LIMIT ".(($curr_page-1)*$results_per_page).", $results_per_page";
       echo "<h5>Listings sorted by newly listed:</h5>";
@@ -193,7 +191,6 @@
                   on a.itemID = b.itemID
                 JOIN Category c on a.categoryID = c.categoryID
                 WHERE a.itemID in ($filteredResults)
-                AND a.endDateTime>NOW()
                 ORDER BY bidPrice ASC
                 LIMIT ".(($curr_page-1)*$results_per_page).", $results_per_page";
       echo "<h5>Listings sorted by lowest to highest price:</h5>";
@@ -206,7 +203,6 @@
                   on a.itemID = b.itemID
                 JOIN Category c on a.categoryID = c.categoryID
                 WHERE a.itemID in ($filteredResults)
-                AND a.endDateTime>NOW()
                 ORDER BY bidPrice DESC
                 LIMIT ".(($curr_page-1)*$results_per_page).", $results_per_page";
       echo "<h5>Listings sorted by highest to lowest price:</h5>";
