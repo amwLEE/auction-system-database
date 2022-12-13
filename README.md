@@ -1,8 +1,11 @@
 # COMP0178 Database Fundamentals Project
 ## Group 10
 Dylan Conceicao
+
 Amanda Lee
+
 Melody Leom
+
 Valerie Song
 
 ## Overview
@@ -20,7 +23,9 @@ Our auction system has the following capabilities:
 |#6|Buyers can receive recommendations for items to bid on based on collaborative filtering (i.e., ‘you might want to bid on the sorts of things other people, who have also bid on the sorts of things you have previously bid on, are currently bidding on).|
 
 ## Demo video URL
-A video demonstration of our auction system's capabilities can be found in the following link: https://youtu.be/Lc-_V5TVD50
+A video demonstration of our auction system's capabilities can be found in the following link: 
+
+https://youtu.be/Lc-_V5TVD50
 
 ## How to run
 1. Open phpmyadmin database and import createdb.sql
