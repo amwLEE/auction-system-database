@@ -9,7 +9,7 @@ Melody Leom
 Valerie Song
 
 ## Overview
-This is the source code for our group's auction system built using the WAMP/MAMP stack. The design of the database is done in a way that ensures Third Normal Form (3NF). More details about our auction system and design can be found in our design report ("COMP0178_group10_report).
+This is the source code for our group's auction system built using the WAMP/MAMP stack. The design of the database is done in a way that ensures Third Normal Form (3NF). More details about our auction system and design can be found in our design report ("COMP0178_group10_report.pdf").
 
 ## Capabilities
 Our auction system has the following capabilities:
