@@ -30,5 +30,6 @@ https://youtu.be/Lc-_V5TVD50
 ## How to run
 1. Open phpmyadmin database and import createdb.sql
 2. Import illustrative_data.sql
-3. Set up server using WAMP/MAMP/LAMP and interact with the auction website through localhost. User accounts are available in illustrative_data.sql
+3. Set up server using WAMP/MAMP/LAMP and ensure that our source code is in the working directory
+4. Interact with the auction website through localhost. User accounts are available in illustrative_data.sql
 
